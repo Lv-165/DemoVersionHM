@@ -20,6 +20,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [[self navigationController] setNavigationBarHidden:NO animated:YES];
     // Do any additional setup after loading the view.
 }
 #pragma mark - UISearchBarDelegate
