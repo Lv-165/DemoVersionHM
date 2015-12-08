@@ -160,34 +160,42 @@
 - (IBAction)actionDwnloadSwitch:(id)sender {
     
     HMDownloadCellTableViewCell* cell = [sender superCell];
-    
     NSLog(@"name = %@, count = %@\n", cell.continentLable.text, cell.countLable.text);
     
-    for (Countries* countries in self.arrayOfContries ) {
-        if ([cell.continentLable.text isEqualToString:countries.name]) {
-            //getPlacesByContinentName
-            
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [[HMServerManager sharedManager] getPlacesByCountryWithISO:countries.iso onSuccess:^(NSDictionary *places)  {
-//                NSLog(@"%@/n", places);
+    UISwitch *mySwitch = (UISwitch *)sender;
+    if ([mySwitch isOn]) {
+        for (Countries* countries in self.arrayOfContries ) {
+            if ([cell.continentLable.text isEqualToString:countries.name]) {
+                //getPlacesByContinentName
                 
-                [self.arrayOfPlaces removeAllObjects];
-                for (NSDictionary* dict in places) {
-                    
-                    [self.arrayOfPlaces addObject:[dict objectForKey:@"id"]];
-                }
-                [self downloadPlaces:countries];
-                
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    [[HMServerManager sharedManager] getPlacesByCountryWithISO:countries.iso onSuccess:^(NSDictionary *places)  {
+                        //                NSLog(@"%@/n", places);
+                        
+                        [self.arrayOfPlaces removeAllObjects];
+                        for (NSDictionary* dict in places) {
+                            
+                            [self.arrayOfPlaces addObject:[dict objectForKey:@"id"]];
+                        }
+                        [self downloadPlaces:countries];
+                        
                         
                     } onFailure:^(NSError *error, NSInteger statusCode) {
                         
                     }];
-            return;});
-            
+                    return;});
+                
+            }
         }
-//        [[HMCoreDataManager sharedManager]printCountryA];//не выводит
     }
-
+    else {
+        for (Countries* countries in self.arrayOfContries ) {
+            if ([cell.continentLable.text isEqualToString:countries.name]) {
+                NSSet *set = countries.place;
+                [countries removePlace:set];
+            }
+        }
+    }
 }
 
 - (void) downloadPlaces:(Countries*)countries {
@@ -228,8 +236,6 @@
     NSLog(@"%@",searchBar);
     self.fetchedResultsController = nil;
     self.searchString = searchText;
-    
-//    [self.tableView reloadData];
 }
 
 @end
