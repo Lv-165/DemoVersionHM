@@ -29,6 +29,9 @@
 		302A11D61C0371C3002F8FF0 /* UIProgressView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 302A11C31C0371C3002F8FF0 /* UIProgressView+AFNetworking.m */; };
 		302A11D71C0371C3002F8FF0 /* UIRefreshControl+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 302A11C51C0371C3002F8FF0 /* UIRefreshControl+AFNetworking.m */; };
 		302A11D81C0371C3002F8FF0 /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 302A11C71C0371C3002F8FF0 /* UIWebView+AFNetworking.m */; };
+		308A5CDA1C1735F4009DD439 /* SVGeocoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 308A5CD71C1735F4009DD439 /* SVGeocoder.m */; };
+		308A5CDB1C1735F4009DD439 /* SVPlacemark.m in Sources */ = {isa = PBXBuildFile; fileRef = 308A5CD91C1735F4009DD439 /* SVPlacemark.m */; };
+		308A5CDE1C173620009DD439 /* UICellForInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 308A5CDD1C173620009DD439 /* UICellForInfo.m */; };
 		7F2F73241C0362BD001A2BFF /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F2F73231C0362BD001A2BFF /* MapKit.framework */; };
 		7FA55BE11C0DAFC700B99CC1 /* HMDownloadCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FA55BE01C0DAFC700B99CC1 /* HMDownloadCellTableViewCell.m */; };
 		7FA55BE81C0DB08200B99CC1 /* UIView+HMUItableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FA55BE71C0DB08200B99CC1 /* UIView+HMUItableViewCell.m */; };
@@ -138,6 +141,12 @@
 		302A11C51C0371C3002F8FF0 /* UIRefreshControl+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIRefreshControl+AFNetworking.m"; sourceTree = "<group>"; };
 		302A11C61C0371C3002F8FF0 /* UIWebView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWebView+AFNetworking.h"; sourceTree = "<group>"; };
 		302A11C71C0371C3002F8FF0 /* UIWebView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+AFNetworking.m"; sourceTree = "<group>"; };
+		308A5CD61C1735F4009DD439 /* SVGeocoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVGeocoder.h; sourceTree = "<group>"; };
+		308A5CD71C1735F4009DD439 /* SVGeocoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVGeocoder.m; sourceTree = "<group>"; };
+		308A5CD81C1735F4009DD439 /* SVPlacemark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVPlacemark.h; sourceTree = "<group>"; };
+		308A5CD91C1735F4009DD439 /* SVPlacemark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVPlacemark.m; sourceTree = "<group>"; };
+		308A5CDC1C173620009DD439 /* UICellForInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICellForInfo.h; sourceTree = "<group>"; };
+		308A5CDD1C173620009DD439 /* UICellForInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICellForInfo.m; sourceTree = "<group>"; };
 		7F2F73231C0362BD001A2BFF /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		7FA55BDF1C0DAFC700B99CC1 /* HMDownloadCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMDownloadCellTableViewCell.h; sourceTree = "<group>"; };
 		7FA55BE01C0DAFC700B99CC1 /* HMDownloadCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HMDownloadCellTableViewCell.m; sourceTree = "<group>"; };
@@ -267,6 +276,7 @@
 		302A119C1C037143002F8FF0 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				308A5CD51C1735F4009DD439 /* SVGeocoder */,
 				CE4CC4881C14EB6F002C4358 /* Reachability.h */,
 				CE4CC4891C14EB6F002C4358 /* Reachability.m */,
 				0C93B26C1C11DB840032A3AE /* FBAnnotationClustering */,
@@ -328,6 +338,17 @@
 				302A11C71C0371C3002F8FF0 /* UIWebView+AFNetworking.m */,
 			);
 			path = "UIKit+AFNetworking";
+			sourceTree = "<group>";
+		};
+		308A5CD51C1735F4009DD439 /* SVGeocoder */ = {
+			isa = PBXGroup;
+			children = (
+				308A5CD61C1735F4009DD439 /* SVGeocoder.h */,
+				308A5CD71C1735F4009DD439 /* SVGeocoder.m */,
+				308A5CD81C1735F4009DD439 /* SVPlacemark.h */,
+				308A5CD91C1735F4009DD439 /* SVPlacemark.m */,
+			);
+			path = SVGeocoder;
 			sourceTree = "<group>";
 		};
 		30E661A01C0B17C50076EBAC /* HPServer Manager */ = {
@@ -414,6 +435,8 @@
 				C01442EA1C0333A5000F8F6F /* Main.storyboard */,
 				C01442F01C0333A5000F8F6F /* Assets.xcassets */,
 				C01442F21C0333A5000F8F6F /* LaunchScreen.storyboard */,
+				308A5CDC1C173620009DD439 /* UICellForInfo.h */,
+				308A5CDD1C173620009DD439 /* UICellForInfo.m */,
 				C01442F51C0333A5000F8F6F /* Info.plist */,
 				C01442ED1C0333A5000F8F6F /* lv_165IOS.xcdatamodeld */,
 				3018962E1C0895DC00178A04 /* HMServerManager.h */,
@@ -638,6 +661,8 @@
 				7FE4EC611C0F12160075C9AC /* NSNumber+HMNumber.m in Sources */,
 				0C93B2811C11DECB0032A3AE /* FBQuadTree.m in Sources */,
 				A10299291C0F1A7800BA5896 /* UIView+MKAnnotationView.m in Sources */,
+				308A5CDA1C1735F4009DD439 /* SVGeocoder.m in Sources */,
+				308A5CDE1C173620009DD439 /* UICellForInfo.m in Sources */,
 				C0729E401C09FBF700ADF283 /* HMCountriesViewController.m in Sources */,
 				302A11D61C0371C3002F8FF0 /* UIProgressView+AFNetworking.m in Sources */,
 				841135651C124399004AEDCA /* Location.m in Sources */,
@@ -691,6 +716,7 @@
 				302A11D11C0371C3002F8FF0 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				8411355B1C124399004AEDCA /* DescriptionInfo.m in Sources */,
 				C01442E31C0333A5000F8F6F /* main.m in Sources */,
+				308A5CDB1C1735F4009DD439 /* SVPlacemark.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
