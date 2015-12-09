@@ -35,6 +35,7 @@
 		7F2F73241C0362BD001A2BFF /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F2F73231C0362BD001A2BFF /* MapKit.framework */; };
 		7FA55BE11C0DAFC700B99CC1 /* HMDownloadCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FA55BE01C0DAFC700B99CC1 /* HMDownloadCellTableViewCell.m */; };
 		7FA55BE81C0DB08200B99CC1 /* UIView+HMUItableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FA55BE71C0DB08200B99CC1 /* UIView+HMUItableViewCell.m */; };
+		7FC50A161C185FD100B1A2E0 /* HMCommentsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FC50A151C185FD100B1A2E0 /* HMCommentsTableViewController.m */; };
 		7FE4EC611C0F12160075C9AC /* NSNumber+HMNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FE4EC601C0F12160075C9AC /* NSNumber+HMNumber.m */; };
 		841135561C124399004AEDCA /* Continent+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 841135331C124399004AEDCA /* Continent+CoreDataProperties.m */; };
 		841135571C124399004AEDCA /* Continent.m in Sources */ = {isa = PBXBuildFile; fileRef = 841135351C124399004AEDCA /* Continent.m */; };
@@ -152,6 +153,8 @@
 		7FA55BE01C0DAFC700B99CC1 /* HMDownloadCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HMDownloadCellTableViewCell.m; sourceTree = "<group>"; };
 		7FA55BE61C0DB08200B99CC1 /* UIView+HMUItableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+HMUItableViewCell.h"; sourceTree = "<group>"; };
 		7FA55BE71C0DB08200B99CC1 /* UIView+HMUItableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+HMUItableViewCell.m"; sourceTree = "<group>"; };
+		7FC50A141C185FD100B1A2E0 /* HMCommentsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMCommentsTableViewController.h; sourceTree = "<group>"; };
+		7FC50A151C185FD100B1A2E0 /* HMCommentsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HMCommentsTableViewController.m; sourceTree = "<group>"; };
 		7FE4EC5F1C0F12160075C9AC /* NSNumber+HMNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNumber+HMNumber.h"; path = "Extensions/NSNumber+HMNumber.h"; sourceTree = "<group>"; };
 		7FE4EC601C0F12160075C9AC /* NSNumber+HMNumber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSNumber+HMNumber.m"; path = "Extensions/NSNumber+HMNumber.m"; sourceTree = "<group>"; };
 		7FE6FF3D1C105F43005C6CB0 /* HMMapAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMMapAnnotation.h; sourceTree = "<group>"; };
@@ -431,6 +434,8 @@
 				C01442E81C0333A5000F8F6F /* HMMapViewController.m */,
 				7FE6FF3D1C105F43005C6CB0 /* HMMapAnnotation.h */,
 				7FE6FF3E1C105F43005C6CB0 /* HMMapAnnotation.m */,
+				7FC50A141C185FD100B1A2E0 /* HMCommentsTableViewController.h */,
+				7FC50A151C185FD100B1A2E0 /* HMCommentsTableViewController.m */,
 				C01442E11C0333A5000F8F6F /* Supporting Files */,
 				C01442EA1C0333A5000F8F6F /* Main.storyboard */,
 				C01442F01C0333A5000F8F6F /* Assets.xcassets */,
@@ -714,6 +719,7 @@
 				7FA55BE11C0DAFC700B99CC1 /* HMDownloadCellTableViewCell.m in Sources */,
 				302A11D01C0371C3002F8FF0 /* AFURLSessionManager.m in Sources */,
 				302A11D11C0371C3002F8FF0 /* AFNetworkActivityIndicatorManager.m in Sources */,
+				7FC50A161C185FD100B1A2E0 /* HMCommentsTableViewController.m in Sources */,
 				8411355B1C124399004AEDCA /* DescriptionInfo.m in Sources */,
 				C01442E31C0333A5000F8F6F /* main.m in Sources */,
 				308A5CDB1C1735F4009DD439 /* SVPlacemark.m in Sources */,

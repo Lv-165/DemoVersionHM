@@ -17,18 +17,12 @@
 #import "Comments.h"
 #import "Place.h"
 #import "HMMapAnnotation.h"
+#import "SVGeocoder.h"
 
 @interface HMMapViewController ()
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
 
-//@property (strong, nonatomic)NSMutableArray *arrayOfCountries;
-//@property (strong, nonatomic)NSMutableArray *araryOfContinents;
-//@property (strong, nonatomic)NSMutableArray *arrayOfCountriesByISO;
-//@property (strong, nonatomic)NSMutableArray *arrayOfPlaces;
-//@property (strong, nonatomic)NSMutableArray *arrayOfPlacesAndDot;
-//@property (strong, nonatomic)NSMutableArray *arrayOfPlacesByCity;
-//@property (strong, nonatomic)NSMutableArray *arrayOfPlacesByContinent;
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext* managedObjectContext;
 
@@ -65,8 +59,16 @@ static bool isMainRoute;
 #warning USER DEFAULT
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(showPlace:)
+                                                 name:showPlaceNotificationCenter object:nil];
+    
     self.ratingOfPoints = [userDefaults integerForKey:kSettingsRating];
     self.pointHasComments = [userDefaults boolForKey:kSettingsComments];
+    
+    NSLog(@" rating of points %@",[NSString stringWithFormat:@"%ld",(long)self.ratingOfPoints]);
+    NSLog(@" point has comments %@",[NSString stringWithFormat:@"%ld",(long)self.pointHasComments]);
+    NSLog(@" Points in map array %lu",(unsigned long)[self.mapPointArray count]);
     
     [[NSOperationQueue new] addOperationWithBlock:^{
         double scale =
@@ -142,23 +144,10 @@ static bool isMainRoute;
     [self printPointWithContinent];
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    // Edit the entity name as appropriate.
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Countries"
                                               inManagedObjectContext:self.managedObjectContext];
     [fetchRequest setEntity:entity];
     
-    
-//    NSError* error;
-//    
-//    NSUInteger count = [[self managedObjectContext] countForFetchRequest:fetchRequest
-//                                                                   error:&error];
-//    
-//    if (!count) {
-//        NSString * storyboardName = @"Main";
-//        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
-//        UIViewController * vc = [storyboard instantiateViewControllerWithIdentifier:@"downloadCountries"];
-//        [self presentViewController:vc animated:YES completion:nil];
-//    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -271,8 +260,7 @@ static bool isMainRoute;
         NSLog(@"Successfully received ChangeMapTypeNotification notification!");
         
         self.mapView.mapType = [[notification.userInfo objectForKey:@"value"] intValue];
-        
-        
+          
     }
     
 }
@@ -286,7 +274,7 @@ static bool isMainRoute;
 #pragma mark - Annotation View
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation {
-    
+    static NSString* identifier = @"Annotation";
     if ([annotation isKindOfClass:[MKUserLocation class]]) {
         return nil;
     } else if ([annotation isKindOfClass:[FBAnnotationCluster class]]) {
@@ -294,39 +282,53 @@ static bool isMainRoute;
         FBAnnotationCluster *cluster = (FBAnnotationCluster *)annotation;
         NSLog(@"Annotation is cluster. Number of annotations in cluster: %lu",
               (unsigned long)cluster.annotations.count);
-    }
-    
-    static NSString* identifier = @"Annotation";
+    } 
     
     MKPinAnnotationView* pin = (MKPinAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
     
     if (!pin) {
         pin = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
-        pin.pinTintColor = MKPinAnnotationColorRed;
-        pin.animatesDrop = YES;
-        pin.canShowCallout = YES;
-        //pin.draggable = YES;
-        
-        
-        UIButton* descriptionButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-        
-        [descriptionButton addTarget:self
-                              action:@selector(actionDescription:)
-                    forControlEvents:UIControlEventTouchUpInside];
-        
-        pin.rightCalloutAccessoryView = descriptionButton;
-        
-        
-        UIButton* directionButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
-        
-        [directionButton addTarget:self
-                            action:@selector(actionDirection:)
-                  forControlEvents:UIControlEventTouchUpInside];
-        pin.leftCalloutAccessoryView = directionButton;
-        
-    } else {
-        pin.annotation = annotation;
     }
+    if ([annotation isKindOfClass:[HMMapAnnotation class]]) {
+        switch (((HMMapAnnotation *)annotation).ratingForColor) {
+            case goodRaing:
+            {
+                pin.pinTintColor = [UIColor greenColor] ;
+                break;
+            }
+            case badRating:
+            {
+                pin.pinTintColor = [UIColor redColor];
+                break;
+            }
+            case senseLess:
+            {
+                pin.pinTintColor = [UIColor blueColor];
+                break;
+            }
+        }
+    } else {
+        pin.pinTintColor = [UIColor grayColor];
+    }
+    pin.animatesDrop = YES;
+    pin.canShowCallout = YES;
+    
+    
+    UIButton* descriptionButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+    
+    [descriptionButton addTarget:self
+                          action:@selector(actionDescription:)
+                forControlEvents:UIControlEventTouchUpInside];
+    
+    pin.rightCalloutAccessoryView = descriptionButton;
+    
+    
+    UIButton* directionButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
+    
+    [directionButton addTarget:self
+                        action:@selector(actionDirection:)
+              forControlEvents:UIControlEventTouchUpInside];
+    pin.leftCalloutAccessoryView = directionButton;
     
     return pin;
 }
@@ -513,21 +515,6 @@ static bool isMainRoute;
         return;
     }
     
-//    UIButton* directionButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 25, 25)];
-//    [directionButton setBackgroundImage:[UIImage imageNamed:@"removeButton"] forState:UIControlStateNormal];
-//    [directionButton addTarget:self action:@selector(actionRemoveRoute:) forControlEvents:UIControlEventTouchUpInside];
-//    annotationView.leftCalloutAccessoryView = directionButton;
-//    
-//    if (self.annotationViewRemoveRoute) {
-//        UIButton* directionButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
-//        [directionButton addTarget:self action:@selector(actionDirection:) forControlEvents:UIControlEventTouchUpInside];
-//        self.annotationViewRemoveRoute.leftCalloutAccessoryView = directionButton;
-//        self.annotationViewRemoveRoute = annotationView;
-//    }
-//    else {
-//        self.annotationViewRemoveRoute = annotationView;
-//    }
-    
     CLLocationCoordinate2D coordinate = annotationView.annotation.coordinate;
     
     isMainRoute = YES;
@@ -537,15 +524,9 @@ static bool isMainRoute;
     isMainRoute = NO;
     [self createRouteForAnotationCoordinate:self.mapView.userLocation.coordinate
                             startCoordinate:coordinate];
-    
-//    namePointRoute = [NSString stringWithFormat:@"%@ = %@",
-//                      annotationView.annotation.title,
-//                      annotationView.annotation.subtitle];
 }
 
 - (void) actionRemoveRoute:(UIButton*) sender {
-    
-    //self.annotationViewRemoveRoute = nil;
     
     MKAnnotationView* annotationView = [sender superAnnotationView];
     
@@ -556,21 +537,6 @@ static bool isMainRoute;
     [self removeRoutes];
 }
 
-//+ (void)addNameContinent:(NSString*)continent {
-//    
-//    if (!nameCountries) {
-//        nameCountries = [[NSMutableArray alloc] init];
-//    }
-//    
-//    nameCountries = [[NSMutableArray alloc] init];
-//    
-//    NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
-//    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Countries"];
-//    
-//    [nameCountries addObject:continent];
-//}
-
-#pragma mark Print All Points
 - (void)printPointWithContinent {
     
     NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
@@ -594,40 +560,42 @@ static bool isMainRoute;
             break;
     }
     
-    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"rating >= %@",[NSString stringWithFormat:@"%ld",(long)ratingForPoints]];
+    NSPredicate* ratingPredicate = [NSPredicate predicateWithFormat:@"rating >= %@",[NSString stringWithFormat:@"%ld",self.ratingOfPoints]];
     
     if(self.pointHasComments) {
-        [fetchRequest setPredicate:predicate];
+        [fetchRequest setPredicate:ratingPredicate];
     } else {
         
-        NSPredicate* predicate2 = [NSPredicate predicateWithFormat:@"comments_count > %@",@"0"];
+        NSPredicate* commentsCountPredicate = [NSPredicate predicateWithFormat:@"comments_count > %@",@"0"];
         
-        
-        NSPredicate *newPredicate = [NSPredicate predicateWithFormat:@"anAttribute == %@", [NSNumber numberWithBool:self.pointHasComments]];
-        
-        //
-        
-        NSPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects:predicate, predicate2, nil]];
+        NSPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects:ratingPredicate, ratingPredicate, nil]];
         
         [fetchRequest setPredicate:compoundPredicate];}
     
     self.mapPointArray = [[managedObjectContext executeFetchRequest:fetchRequest
                                                               error:nil] mutableCopy];
-    NSLog(@"Rating >= points count %lu",[self.mapPointArray count]);
+    
     _clusteredAnnotations = [NSMutableArray new];
     
     for (Place* place in self.mapPointArray) {
         
 #warning Print all objects!!!
         
-        //                NSLog(@"\nid = %@, lat = %@, lon = %@ Rating = %@ COMMENTS - %@",place.id, place.lat, place.lon,place.rating,place.comments_count);
+        //  NSLog(@"\nid = %@, lat = %@, lon = %@ Rating = %@ COMMENTS - %@",place.id, place.lat, place.lon,place.rating,place.comments_count);
         
         HMMapAnnotation *annotation = [[HMMapAnnotation alloc] init];
         
         CLLocationCoordinate2D coordinate;
         coordinate.latitude = [place.lat doubleValue];
         coordinate.longitude = [place.lon doubleValue];
-        
+        if ([place.rating intValue] == 0) {
+            annotation.ratingForColor = senseLess;
+        } else if (([place.rating intValue] >= 1) && ([place.rating intValue] <= 3)) {
+            annotation.ratingForColor = badRating;
+        } else {
+            annotation.ratingForColor = goodRaing;
+        }
+     
         annotation.coordinate = coordinate;
         annotation.title = [NSString stringWithFormat:@"%@", place.id];
         annotation.subtitle = [NSString stringWithFormat:@"%.5g, %.5g",
@@ -638,9 +606,19 @@ static bool isMainRoute;
         
         [self.mapView addAnnotation:annotation];
     }
-    //        }
+
     self.clusteringManager = [[FBClusteringManager alloc] initWithAnnotations:_clusteredAnnotations];
-    //    }
+
+}
+
+#pragma mark - methods for Notification
+- (void)showPlace:(NSNotification *)notification {
+    [self.navigationController popToRootViewControllerAnimated:YES];
+    SVPlacemark *object =
+    [notification.userInfo objectForKey:showPlaceNotificationCenterInfoKey];
+    CLLocationCoordinate2D point = object.coordinate;
+    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(point, 800, 800);
+    [self.mapView setRegion:[self.mapView regionThatFits:region] animated:YES];
 }
 
 

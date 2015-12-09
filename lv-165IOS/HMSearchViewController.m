@@ -10,6 +10,9 @@
 #import "SVGeocoder.h"
 #import "UICellForInfo.h"
 
+NSString* const showPlaceNotificationCenter = @"showPlaceNotificationCenter";
+NSString* const showPlaceNotificationCenterInfoKey = @"showPlaceNotificationCenterInfoKey";
+
 @interface HMSearchViewController ()
 
 @property (strong, nonatomic)NSArray *arrayForPlacesMarks;
@@ -126,6 +129,14 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    SVPlacemark *object = self.arrayForPlacesMarks[indexPath.row];
+    NSDictionary *dictionary = [NSDictionary dictionaryWithObject:object
+                                                           forKey:showPlaceNotificationCenterInfoKey];
+    [[NSNotificationCenter defaultCenter] postNotificationName:showPlaceNotificationCenter
+                                                        object:nil
+                                                      userInfo:dictionary];
+
+    
 }
 
 

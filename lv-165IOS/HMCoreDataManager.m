@@ -8,6 +8,10 @@
 
 #import "HMCoreDataManager.h"
 #import "NSNumber+HMNumber.h"
+#import "Place.h"
+#import "Description.h"
+#import "Comments.h"
+#import "DescriptionInfo.h"
 
 @implementation HMCoreDataManager
 
@@ -86,18 +90,29 @@
     double latDounble = [[placeNSDictionary valueForKey:@"lat"] doubleValue];
     place.lat = [NSNumber numberWithDouble:latDounble];
     
+    Description* description = [NSEntityDescription insertNewObjectForEntityForName:@"Description"
+                                                             inManagedObjectContext:[self managedObjectContext]];
     
-    
-//    countries.place = place;
+    NSLog(@"description l = %@", [placeNSDictionary objectForKey:@"description"]);
 
-    [countries addPlaceObject:place];
-    //NSLog(@"COUNTRY PLACE %@",countries.place);
+    //description.language = [NSString stringWithFormat:@"%@", [[placeNSDictionary objectForKey:@"description"] allKeys]];
+    //only English language, yet
+    description.language = @"en_UK";
     
+    DescriptionInfo *descriptionInfo = [NSEntityDescription insertNewObjectForEntityForName:@"DescriptionInfo"
+                                                                     inManagedObjectContext:[self managedObjectContext]];
+    
+    NSDictionary* descriptionDictionary = [[placeNSDictionary objectForKey:@"description"] objectForKey:description.language];
+    descriptionInfo.descriptionString = [descriptionDictionary objectForKey:@"description"];
+    
+    description.descriptInfo = descriptionInfo;
+    [place addDescriptObject:description];
+    [countries addPlaceObject:place];
+
     NSError* error = nil;
     if (![[self managedObjectContext] save:&error]) {
         NSLog(@"%@", [error localizedDescription]);
     }
-    
 }
 
 - (void) deleteAllObjects {
