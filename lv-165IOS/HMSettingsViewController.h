@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface HMSettingsViewController : UIViewController
+@interface HMSettingsViewController : UITableViewController
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControlForMapType;
 @property (nonatomic, strong) NSNumber *mapType;
+@property (weak, nonatomic) IBOutlet UIPickerView *languagePickerView;
+@property (strong, nonatomic) NSArray *dataSource;
 
 - (IBAction)segmentedControlForMapTypeValueChanged:(id)sender;
 - (IBAction)actionDownloadsCountries:(id)sender;

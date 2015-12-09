@@ -8,7 +8,7 @@
 
 #import "HMSettingsViewController.h"
 
-@interface HMSettingsViewController ()
+@interface HMSettingsViewController () <UIPickerViewDelegate, UIPickerViewDataSource>
 
 @end
 
@@ -21,6 +21,12 @@
     [[self navigationController] setNavigationBarHidden:NO animated:YES];
     
     self.segmentedControlForMapType.selectedSegmentIndex = [self.mapType intValue];
+    
+    // Initialize Data
+    self.dataSource = [NSArray arrayWithObjects:@"EN",@"GB",@"FR",@"UA", nil];
+    // Connect data
+    self.languagePickerView.delegate = self;
+    self.languagePickerView.dataSource = self;
     
 }
 
@@ -49,6 +55,26 @@
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
     UIViewController * vc = [storyboard instantiateViewControllerWithIdentifier:@"downloadCountries"];
     [self presentViewController:vc animated:YES completion:nil];
+}
+
+#pragma mark PickerView DataSource
+
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)thePickerView
+{
+    return 1;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)thePickerView
+numberOfRowsInComponent:(NSInteger)component
+{
+    return self.dataSource.count;
+}
+
+- (NSString *)pickerView:(UIPickerView *)thePickerView
+             titleForRow:(NSInteger)row
+            forComponent:(NSInteger)component
+{
+    return [self.dataSource objectAtIndex:row];
 }
 
 /*
