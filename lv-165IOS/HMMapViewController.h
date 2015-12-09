@@ -16,8 +16,5 @@
 @property (weak, nonatomic) IBOutlet UIToolbar *downToolBar;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 
-//- (void)printPointWithContinent;
-//+ (void)addNameContinent:(NSString*)continent;
-
 @end
 

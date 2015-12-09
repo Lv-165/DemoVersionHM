@@ -22,13 +22,6 @@
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
 
-//@property (strong, nonatomic)NSMutableArray *arrayOfCountries;
-//@property (strong, nonatomic)NSMutableArray *araryOfContinents;
-//@property (strong, nonatomic)NSMutableArray *arrayOfCountriesByISO;
-//@property (strong, nonatomic)NSMutableArray *arrayOfPlaces;
-//@property (strong, nonatomic)NSMutableArray *arrayOfPlacesAndDot;
-//@property (strong, nonatomic)NSMutableArray *arrayOfPlacesByCity;
-//@property (strong, nonatomic)NSMutableArray *arrayOfPlacesByContinent;
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext* managedObjectContext;
 
@@ -284,7 +277,7 @@ static bool isMainRoute;
         FBAnnotationCluster *cluster = (FBAnnotationCluster *)annotation;
         NSLog(@"Annotation is cluster. Number of annotations in cluster: %lu",
               (unsigned long)cluster.annotations.count);
-    }
+    } 
     
     static NSString* identifier = @"Annotation";
     
@@ -293,7 +286,7 @@ static bool isMainRoute;
     if (!pin) {
         pin = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
         pin.pinTintColor = MKPinAnnotationColorRed;
-        pin.animatesDrop = YES;
+        //pin.animatesDrop = YES;
         pin.canShowCallout = YES;
         //pin.draggable = YES;
         
@@ -503,21 +496,6 @@ static bool isMainRoute;
         return;
     }
     
-//    UIButton* directionButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 25, 25)];
-//    [directionButton setBackgroundImage:[UIImage imageNamed:@"removeButton"] forState:UIControlStateNormal];
-//    [directionButton addTarget:self action:@selector(actionRemoveRoute:) forControlEvents:UIControlEventTouchUpInside];
-//    annotationView.leftCalloutAccessoryView = directionButton;
-//    
-//    if (self.annotationViewRemoveRoute) {
-//        UIButton* directionButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
-//        [directionButton addTarget:self action:@selector(actionDirection:) forControlEvents:UIControlEventTouchUpInside];
-//        self.annotationViewRemoveRoute.leftCalloutAccessoryView = directionButton;
-//        self.annotationViewRemoveRoute = annotationView;
-//    }
-//    else {
-//        self.annotationViewRemoveRoute = annotationView;
-//    }
-    
     CLLocationCoordinate2D coordinate = annotationView.annotation.coordinate;
     
     isMainRoute = YES;
@@ -527,15 +505,9 @@ static bool isMainRoute;
     isMainRoute = NO;
     [self createRouteForAnotationCoordinate:self.mapView.userLocation.coordinate
                             startCoordinate:coordinate];
-    
-//    namePointRoute = [NSString stringWithFormat:@"%@ = %@",
-//                      annotationView.annotation.title,
-//                      annotationView.annotation.subtitle];
 }
 
 - (void) actionRemoveRoute:(UIButton*) sender {
-    
-    //self.annotationViewRemoveRoute = nil;
     
     MKAnnotationView* annotationView = [sender superAnnotationView];
     
@@ -546,58 +518,14 @@ static bool isMainRoute;
     [self removeRoutes];
 }
 
-//+ (void)addNameContinent:(NSString*)continent {
-//    
-//    if (!nameCountries) {
-//        nameCountries = [[NSMutableArray alloc] init];
-//    }
-//    
-//    nameCountries = [[NSMutableArray alloc] init];
-//    
-//    NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
-//    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Countries"];
-//    
-//    [nameCountries addObject:continent];
-//}
-
 - (void)printPointWithContinent {
     
     NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Countries"];
     self.mapPointArray = [[managedObjectContext executeFetchRequest:fetchRequest
                                                               error:nil] mutableCopy];
+    
     _clusteredAnnotations = [NSMutableArray new];
-//    for (Countries* countriesTemp in self.mapPointArray) {
-//        for (NSString *nameContinent in nameCountries) {
-//            if ([countriesTemp.name isEqualToString:nameContinent]) {
-//                //NSLog(@"%@",continentTemp.placesOnContinent);
-//                
-//                NSSet* set = [[NSSet alloc] initWithSet:countriesTemp.place];
-//                NSArray* array = [set allObjects];
-//                for (NSInteger i=0; i<[array count]; i++) {
-//                    Place* place = [array objectAtIndex:i];
-//                    NSLog(@"\nid = %@, lat = %@, lon = %@",place.id, place.lat, place.lon);
-//                    
-//                    HMMapAnnotation *annotation = [[HMMapAnnotation alloc] init];
-//                    
-//                    CLLocationCoordinate2D coordinate;
-//                    coordinate.latitude = [place.lat doubleValue];
-//                    coordinate.longitude = [place.lon doubleValue];
-//                    
-//                    annotation.coordinate = coordinate;
-//                    annotation.title = [NSString stringWithFormat:@"%@", place.id];
-//                    annotation.subtitle = [NSString stringWithFormat:@"%.5g, %.5g",
-//                                           annotation.coordinate.latitude,
-//                                           annotation.coordinate.longitude];
-//                    
-//                    [_clusteredAnnotations addObject:annotation];
-//                    
-//                    [self.mapView addAnnotation:annotation];
-//                }
-//            }
-//            
-//        }
-//    }
     
     for (Countries* countriesTemp in self.mapPointArray) {
         if ([countriesTemp.place count] != 0) {

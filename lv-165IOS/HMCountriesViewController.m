@@ -45,15 +45,15 @@
                                                             error:&error];
 
     if (!count) {
- 
-            [self getContinentFromServer];
+        [self getContinentFromServer];
     }
-
+    
     self.arrayOfContries = [[NSMutableArray alloc] init];
     self.arrayOfPlaces = [[NSMutableArray alloc] init];
     
     // Do any additional setup after loading the view.
 }
+
 - (void)getContinentFromServer {
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -62,13 +62,15 @@
 #warning MAIN QUEUE            //we need save only in main queue? c асинхронной вроде быстрей
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                 [[HMCoreDataManager sharedManager] saveCountriesToCoreDataWithNSArray:continents];
+                [[HMCoreDataManager sharedManager] saveCountriesToCoreDataWithNSArray:continents];
+                self.fetchedResultsController = nil;
+                [self.tableView reloadData];
             });
             
         }
-                                                        onFailure:^(NSError *error, NSInteger statusCode) {
-                                                            NSLog(@"error = %@, code = %ld", [error localizedDescription], statusCode);
-                                                        }];
+            onFailure:^(NSError *error, NSInteger statusCode) {
+                NSLog(@"error = %@, code = %ld", [error localizedDescription], statusCode);
+            }];
     });
 
 }
@@ -136,11 +138,7 @@
     cell.continentLable.text = countries.name;
     cell.countLable.text = [NSString stringWithFormat:@"%@", countries.places];
     NSString* countriesIso = [countries.iso lowercaseString];
-//    cell.continentsImage.image = [UIImage imageNamed:countriesIso];
-//    if (cell.continentsImage.image == nil) {
-//        cell.continentsImage.image = [UIImage imageNamed:@"noFlag"];
-//    }
-    
+
     [cell.continentsImage setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://www.geonames.org/flags/x/%@.gif",countriesIso]]
                          placeholderImage:[UIImage imageNamed:@"noFlag"]];
     
@@ -194,6 +192,11 @@
                 NSSet *set = countries.place;
                 [countries removePlace:set];
             }
+        }
+        
+        NSError* error = nil;
+        if (![[self managedObjectContext] save:&error]) {
+            NSLog(@"%@", [error localizedDescription]);
         }
     }
 }
