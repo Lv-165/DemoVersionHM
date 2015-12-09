@@ -277,7 +277,7 @@ static bool isMainRoute;
         FBAnnotationCluster *cluster = (FBAnnotationCluster *)annotation;
         NSLog(@"Annotation is cluster. Number of annotations in cluster: %lu",
               (unsigned long)cluster.annotations.count);
-    }
+    } 
     
     MKPinAnnotationView* pin = (MKPinAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
     
@@ -510,21 +510,6 @@ static bool isMainRoute;
         return;
     }
     
-//    UIButton* directionButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 25, 25)];
-//    [directionButton setBackgroundImage:[UIImage imageNamed:@"removeButton"] forState:UIControlStateNormal];
-//    [directionButton addTarget:self action:@selector(actionRemoveRoute:) forControlEvents:UIControlEventTouchUpInside];
-//    annotationView.leftCalloutAccessoryView = directionButton;
-//    
-//    if (self.annotationViewRemoveRoute) {
-//        UIButton* directionButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
-//        [directionButton addTarget:self action:@selector(actionDirection:) forControlEvents:UIControlEventTouchUpInside];
-//        self.annotationViewRemoveRoute.leftCalloutAccessoryView = directionButton;
-//        self.annotationViewRemoveRoute = annotationView;
-//    }
-//    else {
-//        self.annotationViewRemoveRoute = annotationView;
-//    }
-    
     CLLocationCoordinate2D coordinate = annotationView.annotation.coordinate;
     
     isMainRoute = YES;
@@ -534,15 +519,9 @@ static bool isMainRoute;
     isMainRoute = NO;
     [self createRouteForAnotationCoordinate:self.mapView.userLocation.coordinate
                             startCoordinate:coordinate];
-    
-//    namePointRoute = [NSString stringWithFormat:@"%@ = %@",
-//                      annotationView.annotation.title,
-//                      annotationView.annotation.subtitle];
 }
 
 - (void) actionRemoveRoute:(UIButton*) sender {
-    
-    //self.annotationViewRemoveRoute = nil;
     
     MKAnnotationView* annotationView = [sender superAnnotationView];
     
@@ -553,21 +532,6 @@ static bool isMainRoute;
     [self removeRoutes];
 }
 
-//+ (void)addNameContinent:(NSString*)continent {
-//    
-//    if (!nameCountries) {
-//        nameCountries = [[NSMutableArray alloc] init];
-//    }
-//    
-//    nameCountries = [[NSMutableArray alloc] init];
-//    
-//    NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
-//    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Countries"];
-//    
-//    [nameCountries addObject:continent];
-//}
-
-#pragma mark Print All Points
 - (void)printPointWithContinent {
     
     NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
@@ -605,7 +569,7 @@ static bool isMainRoute;
     
     self.mapPointArray = [[managedObjectContext executeFetchRequest:fetchRequest
                                                               error:nil] mutableCopy];
-    NSLog(@"Rating >= points count %lu",[self.mapPointArray count]);
+    
     _clusteredAnnotations = [NSMutableArray new];
     
     for (Place* place in self.mapPointArray) {

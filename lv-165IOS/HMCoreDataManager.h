@@ -10,7 +10,6 @@
 #import "HMServerManager.h"
 #import "Countries.h"
 //#import "HMCoreDataObjects.h"
-#import "Place.h"
 
 @interface HMCoreDataManager : NSManagedObject 
 
