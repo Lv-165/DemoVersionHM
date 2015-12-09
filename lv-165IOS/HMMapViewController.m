@@ -8,7 +8,7 @@
 
 #import "HMMapViewController.h"
 #import "HMSettingsViewController.h"
-#import "HMFilterViewController.h"
+#import "HMFiltersViewController.h"
 #import "FBAnnotationClustering/FBAnnotationClustering.h"
 #import "HMSearchViewController.h"
 #import <MapKit/MapKit.h>
@@ -36,8 +36,13 @@
 @property (strong, nonatomic) NSMutableArray * clusteredAnnotations;
 @property (strong, nonatomic) FBClusteringManager * clusteringManager;
 
+@property (assign, nonatomic) NSInteger ratingOfPoints;
+@property (assign, nonatomic) BOOL pointHasComments;
+
 
 @end
+static NSString* kSettingsComments         = @"comments";
+static NSString* kSettingsRating           = @"rating";
 
 @implementation HMMapViewController
 
@@ -57,6 +62,11 @@ static bool isMainRoute;
     // Do any additional setup after loading the view, typically from a nib.
     
     self.locationManager = [[CLLocationManager alloc] init];
+#warning USER DEFAULT
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    self.ratingOfPoints = [userDefaults integerForKey:kSettingsRating];
+    self.pointHasComments = [userDefaults boolForKey:kSettingsComments];
     
     [[NSOperationQueue new] addOperationWithBlock:^{
         double scale =
@@ -239,13 +249,13 @@ static bool isMainRoute;
     } else
         if ([segue.identifier isEqualToString:@"showFilterViewController"]) {
             
-            HMFilterViewController *destViewController = segue.destinationViewController;
+            HMFiltersViewController *destViewController = segue.destinationViewController;
             
         }
     else
         if ([segue.identifier isEqualToString:@"showSearchViewController"]) {
             
-            HMSearchViewController *destViewController = segue.destinationViewController;
+            HMFiltersViewController *destViewController = segue.destinationViewController;
             
         }
 
@@ -560,72 +570,77 @@ static bool isMainRoute;
 //    [nameCountries addObject:continent];
 //}
 
+#pragma mark Print All Points
 - (void)printPointWithContinent {
     
     NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Countries"];
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Place"];
+    
+    NSInteger ratingForPoints;
+    
+    switch (self.ratingOfPoints) {
+        case 0:
+            ratingForPoints = 0;
+            break;
+        case 1:
+            ratingForPoints = 4;// second segment control inform to take 4 >= rating points
+            break;
+        case 2:
+            ratingForPoints = 5;// third segment control inform to take only 5 rating points
+            break;
+            
+        default:
+            break;
+    }
+    
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"rating >= %@",[NSString stringWithFormat:@"%ld",(long)ratingForPoints]];
+    
+    if(self.pointHasComments) {
+        [fetchRequest setPredicate:predicate];
+    } else {
+        
+        NSPredicate* predicate2 = [NSPredicate predicateWithFormat:@"comments_count > %@",@"0"];
+        
+        
+        NSPredicate *newPredicate = [NSPredicate predicateWithFormat:@"anAttribute == %@", [NSNumber numberWithBool:self.pointHasComments]];
+        
+        //
+        
+        NSPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects:predicate, predicate2, nil]];
+        
+        [fetchRequest setPredicate:compoundPredicate];}
+    
     self.mapPointArray = [[managedObjectContext executeFetchRequest:fetchRequest
                                                               error:nil] mutableCopy];
+    NSLog(@"Rating >= points count %lu",[self.mapPointArray count]);
     _clusteredAnnotations = [NSMutableArray new];
-//    for (Countries* countriesTemp in self.mapPointArray) {
-//        for (NSString *nameContinent in nameCountries) {
-//            if ([countriesTemp.name isEqualToString:nameContinent]) {
-//                //NSLog(@"%@",continentTemp.placesOnContinent);
-//                
-//                NSSet* set = [[NSSet alloc] initWithSet:countriesTemp.place];
-//                NSArray* array = [set allObjects];
-//                for (NSInteger i=0; i<[array count]; i++) {
-//                    Place* place = [array objectAtIndex:i];
-//                    NSLog(@"\nid = %@, lat = %@, lon = %@",place.id, place.lat, place.lon);
-//                    
-//                    HMMapAnnotation *annotation = [[HMMapAnnotation alloc] init];
-//                    
-//                    CLLocationCoordinate2D coordinate;
-//                    coordinate.latitude = [place.lat doubleValue];
-//                    coordinate.longitude = [place.lon doubleValue];
-//                    
-//                    annotation.coordinate = coordinate;
-//                    annotation.title = [NSString stringWithFormat:@"%@", place.id];
-//                    annotation.subtitle = [NSString stringWithFormat:@"%.5g, %.5g",
-//                                           annotation.coordinate.latitude,
-//                                           annotation.coordinate.longitude];
-//                    
-//                    [_clusteredAnnotations addObject:annotation];
-//                    
-//                    [self.mapView addAnnotation:annotation];
-//                }
-//            }
-//            
-//        }
-//    }
     
-    for (Countries* countriesTemp in self.mapPointArray) {
-        if ([countriesTemp.place count] != 0) {
-            NSSet* set = [[NSSet alloc] initWithSet:countriesTemp.place];
-            NSArray* array = [set allObjects];
-            for (NSInteger i=0; i<[array count]; i++) {
-                Place* place = [array objectAtIndex:i];
-                NSLog(@"\nid = %@, lat = %@, lon = %@",place.id, place.lat, place.lon);
-                
-                HMMapAnnotation *annotation = [[HMMapAnnotation alloc] init];
-                
-                CLLocationCoordinate2D coordinate;
-                coordinate.latitude = [place.lat doubleValue];
-                coordinate.longitude = [place.lon doubleValue];
-                
-                annotation.coordinate = coordinate;
-                annotation.title = [NSString stringWithFormat:@"%@", place.id];
-                annotation.subtitle = [NSString stringWithFormat:@"%.5g, %.5g",
-                                       annotation.coordinate.latitude,
-                                       annotation.coordinate.longitude];
-                
-                [_clusteredAnnotations addObject:annotation];
-                
-                [self.mapView addAnnotation:annotation];
-            }
-        }
-        self.clusteringManager = [[FBClusteringManager alloc] initWithAnnotations:_clusteredAnnotations];
+    for (Place* place in self.mapPointArray) {
+        
+#warning Print all objects!!!
+        
+        //                NSLog(@"\nid = %@, lat = %@, lon = %@ Rating = %@ COMMENTS - %@",place.id, place.lat, place.lon,place.rating,place.comments_count);
+        
+        HMMapAnnotation *annotation = [[HMMapAnnotation alloc] init];
+        
+        CLLocationCoordinate2D coordinate;
+        coordinate.latitude = [place.lat doubleValue];
+        coordinate.longitude = [place.lon doubleValue];
+        
+        annotation.coordinate = coordinate;
+        annotation.title = [NSString stringWithFormat:@"%@", place.id];
+        annotation.subtitle = [NSString stringWithFormat:@"%.5g, %.5g",
+                               annotation.coordinate.latitude,
+                               annotation.coordinate.longitude];
+        
+        [_clusteredAnnotations addObject:annotation];
+        
+        [self.mapView addAnnotation:annotation];
     }
+    //        }
+    self.clusteringManager = [[FBClusteringManager alloc] initWithAnnotations:_clusteredAnnotations];
+    //    }
 }
 
 

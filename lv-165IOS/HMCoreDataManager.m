@@ -72,6 +72,9 @@
     NSInteger ratInteger = [[placeNSDictionary valueForKey:@"rating"] integerValue];
     place.rating = [NSNumber numberWithInteger:ratInteger];
     
+    NSInteger comCountInteger = [[placeNSDictionary valueForKey:@"comments_count "] integerValue];
+    place.comments_count = [NSNumber numberWithInteger:comCountInteger];
+    
     NSInteger ratCountInteger = [[placeNSDictionary valueForKey:@"rating_count"] integerValue];
     place.rating_count = [NSNumber numberWithInteger:ratCountInteger];
 
