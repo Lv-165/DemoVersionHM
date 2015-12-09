@@ -18,6 +18,7 @@
 #import "Place.h"
 #import "HMMapAnnotation.h"
 #import "SVGeocoder.h"
+#import "HMCommentsTableViewController.h"
 
 @interface HMMapViewController ()
 
@@ -33,8 +34,9 @@
 @property (assign, nonatomic) NSInteger ratingOfPoints;
 @property (assign, nonatomic) BOOL pointHasComments;
 
-
+@property (strong, nonatomic) NSArray *placeArray;
 @end
+
 static NSString* kSettingsComments         = @"comments";
 static NSString* kSettingsRating           = @"rating";
 
@@ -246,6 +248,12 @@ static bool isMainRoute;
             
             HMFiltersViewController *destViewController = segue.destinationViewController;
             
+        } else if ([[segue identifier] isEqualToString:@"Comments"]) {
+            
+            Place  *place = [self.placeArray objectAtIndex:0];
+            
+            HMCommentsTableViewController* createViewController = segue.destinationViewController;
+            createViewController.create = place;
         }
 
     
@@ -462,47 +470,22 @@ static bool isMainRoute;
 #pragma mark Action to pin button
 
 - (void) actionDescription:(UIButton*) sender {
-    
+
     MKAnnotationView* annotationView = [sender superAnnotationView];
     
-    if (!annotationView) {
-        return;
-    }
+    NSString *str = [NSString stringWithFormat:@"%@",
+                     annotationView.annotation.title];
+
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"id LIKE %@", str];
     
-    CLGeocoder* geoCoder = [[CLGeocoder alloc] init];
-    CLLocationCoordinate2D coordinate = annotationView.annotation.coordinate;
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Place"];
     
-    CLLocation* location = [[CLLocation alloc] initWithLatitude:coordinate.latitude
-                                                      longitude:coordinate.longitude];
+    request.predicate = predicate;
     
-    if ([geoCoder isGeocoding]) {
-        [geoCoder cancelGeocode];
-    }
+    self.placeArray = [[self managedObjectContext] executeFetchRequest:request
+                                                                 error:nil];
     
-    [geoCoder
-     reverseGeocodeLocation:location
-     completionHandler:^(NSArray *placemarks, NSError *error) {
-         
-         NSString* message = nil;
-         
-         if (error) {
-             message = [error localizedDescription];
-             
-         } else {
-             
-             if ([placemarks count] > 0) {
-                 
-                 MKPlacemark* placeMark = [placemarks firstObject];
-                 message = [placeMark.addressDictionary description];
-                 
-             } else {
-                 message = @"No Placemarks Found";
-             }
-         }
-         
-         [self actionWithTitle:@"OK" alertTitle:@"Location" alertMessage:message];
-     }];
-    
+    [self performSegueWithIdentifier:@"Comments" sender:self];
 }
 
 - (void) actionDirection:(UIButton*) sender {

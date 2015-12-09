@@ -12,6 +12,7 @@
 #import "Description.h"
 #import "Comments.h"
 #import "DescriptionInfo.h"
+#import "Comments.h"
 
 @implementation HMCoreDataManager
 
@@ -76,7 +77,7 @@
     NSInteger ratInteger = [[placeNSDictionary valueForKey:@"rating"] integerValue];
     place.rating = [NSNumber numberWithInteger:ratInteger];
     
-    NSInteger comCountInteger = [[placeNSDictionary valueForKey:@"comments_count "] integerValue];
+    NSInteger comCountInteger = [[placeNSDictionary valueForKey:@"comments_count"] integerValue];
     place.comments_count = [NSNumber numberWithInteger:comCountInteger];
     
     NSInteger ratCountInteger = [[placeNSDictionary valueForKey:@"rating_count"] integerValue];
@@ -98,6 +99,25 @@
     //description.language = [NSString stringWithFormat:@"%@", [[placeNSDictionary objectForKey:@"description"] allKeys]];
     //only English language, yet
     description.language = @"en_UK";
+    
+    if (comCountInteger) {
+//        for (NSString *dict in [placeNSDictionary objectForKey:@"comments"]) {
+//            NSLog(@"%@", [dict valueForKey:comment]);
+//            comment.comment = [dict valueForKey:comment];
+//            [place addCommentsObject:comment];
+//        }
+        
+        NSArray *array = [placeNSDictionary objectForKey:@"comments"];
+        for (NSDictionary *coment in array) {
+            Comments *comment = [NSEntityDescription insertNewObjectForEntityForName:@"Comments"
+                                                              inManagedObjectContext:[self managedObjectContext]];
+            comment.comment = [coment valueForKey:@"comment"];
+            NSInteger commentId = [[placeNSDictionary valueForKey:@"comments_count"] integerValue];
+            comment.id = [NSNumber numberWithInteger:commentId];
+            [place addCommentsObject:comment];
+        }
+    }
+    
     
     DescriptionInfo *descriptionInfo = [NSEntityDescription insertNewObjectForEntityForName:@"DescriptionInfo"
                                                                      inManagedObjectContext:[self managedObjectContext]];

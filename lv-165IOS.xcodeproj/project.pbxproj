@@ -35,7 +35,6 @@
 		7F2F73241C0362BD001A2BFF /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F2F73231C0362BD001A2BFF /* MapKit.framework */; };
 		7FA55BE11C0DAFC700B99CC1 /* HMDownloadCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FA55BE01C0DAFC700B99CC1 /* HMDownloadCellTableViewCell.m */; };
 		7FA55BE81C0DB08200B99CC1 /* UIView+HMUItableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FA55BE71C0DB08200B99CC1 /* UIView+HMUItableViewCell.m */; };
-		7FC50A161C185FD100B1A2E0 /* HMCommentsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FC50A151C185FD100B1A2E0 /* HMCommentsTableViewController.m */; };
 		7FE4EC611C0F12160075C9AC /* NSNumber+HMNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FE4EC601C0F12160075C9AC /* NSNumber+HMNumber.m */; };
 		841135561C124399004AEDCA /* Continent+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 841135331C124399004AEDCA /* Continent+CoreDataProperties.m */; };
 		841135571C124399004AEDCA /* Continent.m in Sources */ = {isa = PBXBuildFile; fileRef = 841135351C124399004AEDCA /* Continent.m */; };
@@ -55,6 +54,8 @@
 		841135651C124399004AEDCA /* Location.m in Sources */ = {isa = PBXBuildFile; fileRef = 841135511C124399004AEDCA /* Location.m */; };
 		841135661C124399004AEDCA /* Country+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 841135531C124399004AEDCA /* Country+CoreDataProperties.m */; };
 		841135671C124399004AEDCA /* Country.m in Sources */ = {isa = PBXBuildFile; fileRef = 841135551C124399004AEDCA /* Country.m */; };
+		843905861C18E3DC00450FA8 /* HMDynamicTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 843905831C18E3DC00450FA8 /* HMDynamicTableViewCell.m */; };
+		843905871C18E3DC00450FA8 /* HMCommentsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 843905851C18E3DC00450FA8 /* HMCommentsTableViewController.m */; };
 		A10299261C0F153E00BA5896 /* HMMapAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = A10299251C0F153E00BA5896 /* HMMapAnnotation.m */; };
 		A10299291C0F1A7800BA5896 /* UIView+MKAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = A10299281C0F1A7800BA5896 /* UIView+MKAnnotationView.m */; };
 		A1C5EDE41C0CA7C900F94400 /* HMSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1C5EDE21C0CA7C900F94400 /* HMSettingsViewController.m */; };
@@ -153,8 +154,6 @@
 		7FA55BE01C0DAFC700B99CC1 /* HMDownloadCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HMDownloadCellTableViewCell.m; sourceTree = "<group>"; };
 		7FA55BE61C0DB08200B99CC1 /* UIView+HMUItableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+HMUItableViewCell.h"; sourceTree = "<group>"; };
 		7FA55BE71C0DB08200B99CC1 /* UIView+HMUItableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+HMUItableViewCell.m"; sourceTree = "<group>"; };
-		7FC50A141C185FD100B1A2E0 /* HMCommentsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMCommentsTableViewController.h; sourceTree = "<group>"; };
-		7FC50A151C185FD100B1A2E0 /* HMCommentsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HMCommentsTableViewController.m; sourceTree = "<group>"; };
 		7FE4EC5F1C0F12160075C9AC /* NSNumber+HMNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNumber+HMNumber.h"; path = "Extensions/NSNumber+HMNumber.h"; sourceTree = "<group>"; };
 		7FE4EC601C0F12160075C9AC /* NSNumber+HMNumber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSNumber+HMNumber.m"; path = "Extensions/NSNumber+HMNumber.m"; sourceTree = "<group>"; };
 		7FE6FF3D1C105F43005C6CB0 /* HMMapAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMMapAnnotation.h; sourceTree = "<group>"; };
@@ -195,6 +194,10 @@
 		841135531C124399004AEDCA /* Country+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Country+CoreDataProperties.m"; path = "Models/Country+CoreDataProperties.m"; sourceTree = "<group>"; };
 		841135541C124399004AEDCA /* Country.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Country.h; path = Models/Country.h; sourceTree = "<group>"; };
 		841135551C124399004AEDCA /* Country.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Country.m; path = Models/Country.m; sourceTree = "<group>"; };
+		843905821C18E3DC00450FA8 /* HMDynamicTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMDynamicTableViewCell.h; sourceTree = "<group>"; };
+		843905831C18E3DC00450FA8 /* HMDynamicTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HMDynamicTableViewCell.m; sourceTree = "<group>"; };
+		843905841C18E3DC00450FA8 /* HMCommentsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMCommentsTableViewController.h; sourceTree = "<group>"; };
+		843905851C18E3DC00450FA8 /* HMCommentsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HMCommentsTableViewController.m; sourceTree = "<group>"; };
 		A10299241C0F153E00BA5896 /* HMMapAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMMapAnnotation.h; sourceTree = "<group>"; };
 		A10299251C0F153E00BA5896 /* HMMapAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HMMapAnnotation.m; sourceTree = "<group>"; };
 		A10299271C0F1A7800BA5896 /* UIView+MKAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+MKAnnotationView.h"; sourceTree = "<group>"; };
@@ -401,6 +404,17 @@
 			name = Extensions;
 			sourceTree = "<group>";
 		};
+		843905881C18E65F00450FA8 /* Comments */ = {
+			isa = PBXGroup;
+			children = (
+				843905821C18E3DC00450FA8 /* HMDynamicTableViewCell.h */,
+				843905831C18E3DC00450FA8 /* HMDynamicTableViewCell.m */,
+				843905841C18E3DC00450FA8 /* HMCommentsTableViewController.h */,
+				843905851C18E3DC00450FA8 /* HMCommentsTableViewController.m */,
+			);
+			name = Comments;
+			sourceTree = "<group>";
+		};
 		C01442D51C0333A5000F8F6F = {
 			isa = PBXGroup;
 			children = (
@@ -427,6 +441,7 @@
 		C01442E01C0333A5000F8F6F /* lv-165IOS */ = {
 			isa = PBXGroup;
 			children = (
+				843905881C18E65F00450FA8 /* Comments */,
 				7FA55BE21C0DAFCD00B99CC1 /* Download Countries */,
 				C01442E41C0333A5000F8F6F /* HMAppDelegate.h */,
 				C01442E51C0333A5000F8F6F /* HMAppDelegate.m */,
@@ -434,8 +449,6 @@
 				C01442E81C0333A5000F8F6F /* HMMapViewController.m */,
 				7FE6FF3D1C105F43005C6CB0 /* HMMapAnnotation.h */,
 				7FE6FF3E1C105F43005C6CB0 /* HMMapAnnotation.m */,
-				7FC50A141C185FD100B1A2E0 /* HMCommentsTableViewController.h */,
-				7FC50A151C185FD100B1A2E0 /* HMCommentsTableViewController.m */,
 				C01442E11C0333A5000F8F6F /* Supporting Files */,
 				C01442EA1C0333A5000F8F6F /* Main.storyboard */,
 				C01442F01C0333A5000F8F6F /* Assets.xcassets */,
@@ -670,6 +683,7 @@
 				308A5CDE1C173620009DD439 /* UICellForInfo.m in Sources */,
 				C0729E401C09FBF700ADF283 /* HMCountriesViewController.m in Sources */,
 				302A11D61C0371C3002F8FF0 /* UIProgressView+AFNetworking.m in Sources */,
+				843905871C18E3DC00450FA8 /* HMCommentsTableViewController.m in Sources */,
 				841135651C124399004AEDCA /* Location.m in Sources */,
 				C0729E881C09FD9200ADF283 /* HMCoreDataViewController.m in Sources */,
 				0C93B2801C11DECB0032A3AE /* FBClusteringManager.m in Sources */,
@@ -714,12 +728,12 @@
 				841135571C124399004AEDCA /* Continent.m in Sources */,
 				302A11CB1C0371C3002F8FF0 /* AFNetworkReachabilityManager.m in Sources */,
 				302A11CF1C0371C3002F8FF0 /* AFURLResponseSerialization.m in Sources */,
+				843905861C18E3DC00450FA8 /* HMDynamicTableViewCell.m in Sources */,
 				841135561C124399004AEDCA /* Continent+CoreDataProperties.m in Sources */,
 				302A11D81C0371C3002F8FF0 /* UIWebView+AFNetworking.m in Sources */,
 				7FA55BE11C0DAFC700B99CC1 /* HMDownloadCellTableViewCell.m in Sources */,
 				302A11D01C0371C3002F8FF0 /* AFURLSessionManager.m in Sources */,
 				302A11D11C0371C3002F8FF0 /* AFNetworkActivityIndicatorManager.m in Sources */,
-				7FC50A161C185FD100B1A2E0 /* HMCommentsTableViewController.m in Sources */,
 				8411355B1C124399004AEDCA /* DescriptionInfo.m in Sources */,
 				C01442E31C0333A5000F8F6F /* main.m in Sources */,
 				308A5CDB1C1735F4009DD439 /* SVPlacemark.m in Sources */,
