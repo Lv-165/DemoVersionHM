@@ -22,13 +22,6 @@
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
 
-//@property (strong, nonatomic)NSMutableArray *arrayOfCountries;
-//@property (strong, nonatomic)NSMutableArray *araryOfContinents;
-//@property (strong, nonatomic)NSMutableArray *arrayOfCountriesByISO;
-//@property (strong, nonatomic)NSMutableArray *arrayOfPlaces;
-//@property (strong, nonatomic)NSMutableArray *arrayOfPlacesAndDot;
-//@property (strong, nonatomic)NSMutableArray *arrayOfPlacesByCity;
-//@property (strong, nonatomic)NSMutableArray *arrayOfPlacesByContinent;
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext* managedObjectContext;
 
@@ -67,6 +60,10 @@ static bool isMainRoute;
     
     self.ratingOfPoints = [userDefaults integerForKey:kSettingsRating];
     self.pointHasComments = [userDefaults boolForKey:kSettingsComments];
+    
+    NSLog(@" rating of points %@",[NSString stringWithFormat:@"%ld",(long)self.ratingOfPoints]);
+    NSLog(@" point has comments %@",[NSString stringWithFormat:@"%ld",(long)self.pointHasComments]);
+    NSLog(@" Points in map array %lu",(unsigned long)[self.mapPointArray count]);
     
     [[NSOperationQueue new] addOperationWithBlock:^{
         double scale =
@@ -142,23 +139,10 @@ static bool isMainRoute;
     [self printPointWithContinent];
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    // Edit the entity name as appropriate.
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Countries"
                                               inManagedObjectContext:self.managedObjectContext];
     [fetchRequest setEntity:entity];
     
-    
-//    NSError* error;
-//    
-//    NSUInteger count = [[self managedObjectContext] countForFetchRequest:fetchRequest
-//                                                                   error:&error];
-//    
-//    if (!count) {
-//        NSString * storyboardName = @"Main";
-//        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
-//        UIViewController * vc = [storyboard instantiateViewControllerWithIdentifier:@"downloadCountries"];
-//        [self presentViewController:vc animated:YES completion:nil];
-//    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -271,8 +255,7 @@ static bool isMainRoute;
         NSLog(@"Successfully received ChangeMapTypeNotification notification!");
         
         self.mapView.mapType = [[notification.userInfo objectForKey:@"value"] intValue];
-        
-        
+          
     }
     
 }
@@ -594,20 +577,15 @@ static bool isMainRoute;
             break;
     }
     
-    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"rating >= %@",[NSString stringWithFormat:@"%ld",(long)ratingForPoints]];
+    NSPredicate* ratingPredicate = [NSPredicate predicateWithFormat:@"rating >= %@",[NSString stringWithFormat:@"%ld",self.ratingOfPoints]];
     
     if(self.pointHasComments) {
-        [fetchRequest setPredicate:predicate];
+        [fetchRequest setPredicate:ratingPredicate];
     } else {
         
-        NSPredicate* predicate2 = [NSPredicate predicateWithFormat:@"comments_count > %@",@"0"];
+        NSPredicate* commentsCountPredicate = [NSPredicate predicateWithFormat:@"comments_count > %@",@"0"];
         
-        
-        NSPredicate *newPredicate = [NSPredicate predicateWithFormat:@"anAttribute == %@", [NSNumber numberWithBool:self.pointHasComments]];
-        
-        //
-        
-        NSPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects:predicate, predicate2, nil]];
+        NSPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects:ratingPredicate, ratingPredicate, nil]];
         
         [fetchRequest setPredicate:compoundPredicate];}
     
@@ -620,7 +598,7 @@ static bool isMainRoute;
         
 #warning Print all objects!!!
         
-        //                NSLog(@"\nid = %@, lat = %@, lon = %@ Rating = %@ COMMENTS - %@",place.id, place.lat, place.lon,place.rating,place.comments_count);
+        //  NSLog(@"\nid = %@, lat = %@, lon = %@ Rating = %@ COMMENTS - %@",place.id, place.lat, place.lon,place.rating,place.comments_count);
         
         HMMapAnnotation *annotation = [[HMMapAnnotation alloc] init];
         
@@ -638,9 +616,9 @@ static bool isMainRoute;
         
         [self.mapView addAnnotation:annotation];
     }
-    //        }
+
     self.clusteringManager = [[FBClusteringManager alloc] initWithAnnotations:_clusteredAnnotations];
-    //    }
+
 }
 
 

@@ -305,7 +305,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YLF-iN-yxR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="924" y="225"/>
+            <point key="canvasLocation" x="1050" y="223"/>
         </scene>
         <!--Filters View Controller-->
         <scene sceneID="Weg-Dg-hP4">
@@ -334,7 +334,7 @@
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="OCC-y7-ik6">
                                                     <rect key="frame" x="250" y="0.0" width="51" height="31"/>
                                                     <connections>
-                                                        <action selector="actionValueChanged:" destination="C3F-fX-cQd" eventType="valueChanged" id="fze-on-coN"/>
+                                                        <action selector="actionValueChanged:" destination="C3F-fX-cQd" eventType="valueChanged" id="6PA-aT-ggY"/>
                                                     </connections>
                                                 </switch>
                                             </subviews>
@@ -361,7 +361,7 @@
                                                         <segment title="5"/>
                                                     </segments>
                                                     <connections>
-                                                        <action selector="actionValueChanged:" destination="C3F-fX-cQd" eventType="valueChanged" id="sZ1-wF-LMm"/>
+                                                        <action selector="actionValueChanged:" destination="C3F-fX-cQd" eventType="valueChanged" id="YJP-4e-0k1"/>
                                                     </connections>
                                                 </segmentedControl>
                                             </subviews>
@@ -404,6 +404,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="4IV-fb-0yq"/>
                     <connections>
+                        <outlet property="commentLanguagePicker" destination="2lq-9E-XpU" id="TpP-w4-abw"/>
                         <outlet property="commentsSwitch" destination="OCC-y7-ik6" id="3Uc-Af-MEI"/>
                         <outlet property="pickerView" destination="2lq-9E-XpU" id="Edd-Tw-lGU"/>
                         <outlet property="ratingControl" destination="ahp-kR-auh" id="r6G-Yt-pUX"/>
@@ -411,7 +412,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zq0-0f-HTN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="881" y="-491"/>
+            <point key="canvasLocation" x="1050" y="-488"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>

@@ -48,8 +48,7 @@ static NSString* kSettingsCommentsLanguage = @"commentsLanguage";
     return 1;
 }
 
-- (NSInteger)pickerView:(UIPickerView *)thePickerView
-numberOfRowsInComponent:(NSInteger)component
+- (NSInteger)pickerView:(UIPickerView *)thePickerView numberOfRowsInComponent:(NSInteger)component
 {
     return self.dataSource.count;
 }
@@ -70,6 +69,9 @@ numberOfRowsInComponent:(NSInteger)component
     
     [userDefaults setBool:self.commentsSwitch.isOn forKey:kSettingsComments];
     [userDefaults setInteger:self.ratingControl.selectedSegmentIndex forKey:kSettingsRating];
+//   [userDefaults setObject:self.commentLanguagePicker. forKey:<#(nonnull NSString *)#>]
+    
+
   
     [userDefaults synchronize];
 }
