@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+extern NSString* const showPlaceNotificationCenter;
+extern NSString* const showPlaceNotificationCenterInfoKey;
+
 @interface HMSearchViewController : UITableViewController
 
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;

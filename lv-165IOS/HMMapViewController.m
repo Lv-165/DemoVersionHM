@@ -17,6 +17,7 @@
 #import "Comments.h"
 #import "Place.h"
 #import "HMMapAnnotation.h"
+#import "SVGeocoder.h"
 
 @interface HMMapViewController ()
 
@@ -57,6 +58,10 @@ static bool isMainRoute;
     self.locationManager = [[CLLocationManager alloc] init];
 #warning USER DEFAULT
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(showPlace:)
+                                                 name:showPlaceNotificationCenter object:nil];
     
     self.ratingOfPoints = [userDefaults integerForKey:kSettingsRating];
     self.pointHasComments = [userDefaults boolForKey:kSettingsComments];
@@ -604,6 +609,16 @@ static bool isMainRoute;
 
     self.clusteringManager = [[FBClusteringManager alloc] initWithAnnotations:_clusteredAnnotations];
 
+}
+
+#pragma mark - methods for Notification
+- (void)showPlace:(NSNotification *)notification {
+    [self.navigationController popToRootViewControllerAnimated:YES];
+    SVPlacemark *object =
+    [notification.userInfo objectForKey:showPlaceNotificationCenterInfoKey];
+    CLLocationCoordinate2D point = object.coordinate;
+    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(point, 800, 800);
+    [self.mapView setRegion:[self.mapView regionThatFits:region] animated:YES];
 }
 
 
