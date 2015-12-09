@@ -269,7 +269,7 @@ static bool isMainRoute;
 #pragma mark - Annotation View
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation {
-    
+    static NSString* identifier = @"Annotation";
     if ([annotation isKindOfClass:[MKUserLocation class]]) {
         return nil;
     } else if ([annotation isKindOfClass:[FBAnnotationCluster class]]) {
@@ -279,37 +279,51 @@ static bool isMainRoute;
               (unsigned long)cluster.annotations.count);
     }
     
-    static NSString* identifier = @"Annotation";
-    
     MKPinAnnotationView* pin = (MKPinAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
     
     if (!pin) {
         pin = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
-        pin.pinTintColor = MKPinAnnotationColorRed;
-        pin.animatesDrop = YES;
-        pin.canShowCallout = YES;
-        //pin.draggable = YES;
-        
-        
-        UIButton* descriptionButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-        
-        [descriptionButton addTarget:self
-                              action:@selector(actionDescription:)
-                    forControlEvents:UIControlEventTouchUpInside];
-        
-        pin.rightCalloutAccessoryView = descriptionButton;
-        
-        
-        UIButton* directionButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
-        
-        [directionButton addTarget:self
-                            action:@selector(actionDirection:)
-                  forControlEvents:UIControlEventTouchUpInside];
-        pin.leftCalloutAccessoryView = directionButton;
-        
-    } else {
-        pin.annotation = annotation;
     }
+    if ([annotation isKindOfClass:[HMMapAnnotation class]]) {
+        switch (((HMMapAnnotation *)annotation).ratingForColor) {
+            case goodRaing:
+            {
+                pin.pinTintColor = [UIColor greenColor] ;
+                break;
+            }
+            case badRating:
+            {
+                pin.pinTintColor = [UIColor redColor];
+                break;
+            }
+            case senseLess:
+            {
+                pin.pinTintColor = [UIColor blueColor];
+                break;
+            }
+        }
+    } else {
+        pin.pinTintColor = [UIColor grayColor];
+    }
+    pin.animatesDrop = YES;
+    pin.canShowCallout = YES;
+    
+    
+    UIButton* descriptionButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+    
+    [descriptionButton addTarget:self
+                          action:@selector(actionDescription:)
+                forControlEvents:UIControlEventTouchUpInside];
+    
+    pin.rightCalloutAccessoryView = descriptionButton;
+    
+    
+    UIButton* directionButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
+    
+    [directionButton addTarget:self
+                        action:@selector(actionDirection:)
+              forControlEvents:UIControlEventTouchUpInside];
+    pin.leftCalloutAccessoryView = directionButton;
     
     return pin;
 }
@@ -605,7 +619,14 @@ static bool isMainRoute;
         CLLocationCoordinate2D coordinate;
         coordinate.latitude = [place.lat doubleValue];
         coordinate.longitude = [place.lon doubleValue];
-        
+        if ([place.rating intValue] == 0) {
+            annotation.ratingForColor = senseLess;
+        } else if (([place.rating intValue] >= 1) && ([place.rating intValue] <= 3)) {
+            annotation.ratingForColor = badRating;
+        } else {
+            annotation.ratingForColor = goodRaing;
+        }
+     
         annotation.coordinate = coordinate;
         annotation.title = [NSString stringWithFormat:@"%@", place.id];
         annotation.subtitle = [NSString stringWithFormat:@"%.5g, %.5g",
