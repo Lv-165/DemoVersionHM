@@ -189,8 +189,8 @@
                         <outlet property="downToolBar" destination="cpQ-J0-Ekk" id="A7d-TE-jMF"/>
                         <outlet property="mapView" destination="eIw-hm-dci" id="YBP-2t-6ao"/>
                         <segue destination="FcZ-ur-xTB" kind="show" identifier="showSettingsViewController" id="kTR-gT-Ouf"/>
-                        <segue destination="dMV-LU-WqC" kind="show" identifier="showFilterViewController" id="H6g-fj-adH"/>
                         <segue destination="PwR-jp-DFQ" kind="show" identifier="showSearchViewController" id="X3p-XK-KOt"/>
+                        <segue destination="C3F-fX-cQd" kind="show" identifier="showFilterViewController" id="rho-9F-xt8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
