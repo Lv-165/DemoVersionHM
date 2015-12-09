@@ -50,7 +50,6 @@
         NSLog(@"%@  AND %@ PLACES",countries.name, countries.places);
         
     }
-    
     NSError* error = nil;
     
     if (![[self managedObjectContext] save:&error]) {
