@@ -393,9 +393,6 @@
                                                 </label>
                                                 <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2lq-9E-XpU">
                                                     <rect key="frame" x="164" y="-8" width="414" height="230"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="414" id="yUc-pV-daI"/>
-                                                    </constraints>
                                                     <connections>
                                                         <outlet property="dataSource" destination="C3F-fX-cQd" id="L4e-Pg-2Xu"/>
                                                         <outlet property="delegate" destination="C3F-fX-cQd" id="VnC-Z1-Hc6"/>

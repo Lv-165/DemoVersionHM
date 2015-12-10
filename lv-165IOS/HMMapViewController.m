@@ -34,7 +34,7 @@
 @property (assign, nonatomic) NSInteger ratingOfPoints;
 @property (assign, nonatomic) BOOL pointHasComments;
 
-@property (strong, nonatomic) NSArray *placeArray;
+@property (strong, nonatomic) NSArray* placeArray;
 @end
 
 static NSString* kSettingsComments         = @"comments";
@@ -56,15 +56,16 @@ static bool isMainRoute;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    _clusteredAnnotations = nil;
     
     self.locationManager = [[CLLocationManager alloc] init];
 
-    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+  
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(showPlace:)
                                                  name:showPlaceNotificationCenter object:nil];
-    
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
     self.ratingOfPoints = [userDefaults integerForKey:kSettingsRating];
     self.pointHasComments = [userDefaults boolForKey:kSettingsComments];
     
@@ -131,8 +132,9 @@ static bool isMainRoute;
     
     NSArray *buttons = @[ buttonForShowCurrentLocation ,flexibleItem , buttonSearchButton , flexibleItem , buttonForMoveToFilterController , flexibleItem, buttonForMoveToSettingsController ];
     
-    
-    [self printPointWithContinent];
+//    [self printPointWithContinent];
+//    NSLog(@" Points in map array %lu",(unsigned long)[self.mapPointArray count]);
+   
     [self.downToolBar setItems:buttons animated:NO];
     
     self.mapView.showsUserLocation = YES;
@@ -145,13 +147,23 @@ static bool isMainRoute;
     
     NSLog(@" rating of points %@",[NSString stringWithFormat:@"%ld",(long)self.ratingOfPoints]);
     NSLog(@" point has comments %@",self.pointHasComments ? @"Yes" : @"No");
-    NSLog(@" Points in map array %lu",(unsigned long)[self.mapPointArray count]);
+   
 
 }
 
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    self.clusteringManager = [[FBClusteringManager alloc]initWithAnnotations:_clusteredAnnotations];
+    [self.clusteringManager displayAnnotations:_clusteredAnnotations onMapView:_mapView];
+    
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    self.ratingOfPoints = [userDefaults integerForKey:kSettingsRating];
+    self.pointHasComments = [userDefaults boolForKey:kSettingsComments];
+    [self printPointWithContinent];
+    
+    NSLog(@" Points in map array %lu",(unsigned long)[self.mapPointArray count]);
     
     [[self navigationController] setNavigationBarHidden:YES animated:YES];
 }
@@ -319,7 +331,7 @@ static bool isMainRoute;
     } else {
         pin.pinTintColor = [UIColor grayColor];
     }
-    pin.animatesDrop = YES;
+    pin.animatesDrop = NO;
     pin.canShowCallout = YES;
     
     
@@ -411,7 +423,7 @@ static bool isMainRoute;
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-//Build routes
+
 - (void) createRouteForAnotationCoordinate:(CLLocationCoordinate2D)endCoordinate
                            startCoordinate:(CLLocationCoordinate2D)startCoordinate {
     
@@ -607,8 +619,6 @@ static bool isMainRoute;
     MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(point, 800, 800);
     [self.mapView setRegion:[self.mapView regionThatFits:region] animated:YES];
 }
-- (void)mapViewDidFinishLoadingMap:(MKMapView *)mapView {
-    
-}
+
 
 @end
