@@ -58,8 +58,6 @@ static bool isMainRoute;
     // Do any additional setup after loading the view, typically from a nib.
     
     self.locationManager = [[CLLocationManager alloc] init];
-    
-    _clusteredAnnotations = nil;
 
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
     
@@ -74,6 +72,7 @@ static bool isMainRoute;
         double scale =
         _mapView.bounds.size.width / self.mapView.visibleMapRect.size.width;
        //NSArray *annotations = [self.clusteringManager clusteredAnnotationsWithinMapRect:_mapView.visibleMapRect  withZoomScale:scale];
+        
         
         self.clusteringManager = [[FBClusteringManager alloc]initWithAnnotations:_clusteredAnnotations];
         [self.clusteringManager displayAnnotations:_clusteredAnnotations onMapView:_mapView];
@@ -132,8 +131,8 @@ static bool isMainRoute;
     
     NSArray *buttons = @[ buttonForShowCurrentLocation ,flexibleItem , buttonSearchButton , flexibleItem , buttonForMoveToFilterController , flexibleItem, buttonForMoveToSettingsController ];
     
-    [self printPointWithContinent];
     
+    [self printPointWithContinent];
     [self.downToolBar setItems:buttons animated:NO];
     
     self.mapView.showsUserLocation = YES;
@@ -144,18 +143,12 @@ static bool isMainRoute;
                                                 object:nil];
     
     
-    
     NSLog(@" rating of points %@",[NSString stringWithFormat:@"%ld",(long)self.ratingOfPoints]);
     NSLog(@" point has comments %@",self.pointHasComments ? @"Yes" : @"No");
     NSLog(@" Points in map array %lu",(unsigned long)[self.mapPointArray count]);
 
-    
-//    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-//    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Countries"
-//                                              inManagedObjectContext:self.managedObjectContext];
-//    [fetchRequest setEntity:entity];
-    
 }
+
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -265,7 +258,6 @@ static bool isMainRoute;
             createViewController.create = place;
         }
 
-    
 }
 
 #pragma mark - Notifications
@@ -535,34 +527,37 @@ static bool isMainRoute;
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Place"];
     
-    NSInteger ratingForPoints;
+    NSInteger minForPoint = 0;
+    NSInteger maxForPoint = 5;
     
     switch (self.ratingOfPoints) {
         case 0:
-            ratingForPoints = 0;
+            minForPoint = 0;
+            maxForPoint = 5;
             break;
         case 1:
-            ratingForPoints = 4;// second segment control inform to take 4 >= rating points
+            minForPoint = 1;
+            maxForPoint = 3;
             break;
         case 2:
-            ratingForPoints = 5;// third segment control inform to take only 5 rating points
+            minForPoint = 4;
+            maxForPoint = 5;
             break;
             
         default:
             break;
     }
     
-    NSPredicate* ratingPredicate = [NSPredicate predicateWithFormat:@"rating >= %@",[NSString stringWithFormat:@"%ld",self.ratingOfPoints]];
+    NSPredicate* ratingPredicate = [NSPredicate predicateWithFormat:@"%@ => rating  AND rating >= %@",[NSString stringWithFormat:@" %ld",(long)maxForPoint],[NSString stringWithFormat:@" %ld",(long)minForPoint]];
     
     if(!self.pointHasComments) {
         [fetchRequest setPredicate:ratingPredicate];
     } else {
         
-        NSPredicate* commentsCountPredicate = [NSPredicate predicateWithFormat:@"comments_count > %@",@"0"];
+        NSPredicate* commentsCountPredicate = [NSPredicate predicateWithFormat:@"comments_count > %@",@0];
     
         NSPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects:ratingPredicate, commentsCountPredicate, nil]];
-    
-
+ 
       [fetchRequest setPredicate:compoundPredicate];
     }
     
@@ -612,6 +607,8 @@ static bool isMainRoute;
     MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(point, 800, 800);
     [self.mapView setRegion:[self.mapView regionThatFits:region] animated:YES];
 }
-
+- (void)mapViewDidFinishLoadingMap:(MKMapView *)mapView {
+    
+}
 
 @end

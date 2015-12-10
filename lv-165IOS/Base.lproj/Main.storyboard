@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8187.4" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="MnQ-Mm-xcN">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="MnQ-Mm-xcN">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8151.3"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -392,9 +392,9 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2lq-9E-XpU">
-                                                    <rect key="frame" x="164" y="-8" width="320" height="230"/>
+                                                    <rect key="frame" x="164" y="-8" width="414" height="230"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="435" id="yUc-pV-daI"/>
+                                                        <constraint firstAttribute="width" constant="414" id="yUc-pV-daI"/>
                                                     </constraints>
                                                     <connections>
                                                         <outlet property="dataSource" destination="C3F-fX-cQd" id="L4e-Pg-2Xu"/>
@@ -403,19 +403,22 @@
                                                 </pickerView>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="remont" translatesAutoresizingMaskIntoConstraints="NO" id="BaE-IJ-BuS">
                                                     <rect key="frame" x="20" y="86" width="135" height="128"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="135" id="3G7-ZM-Vw4"/>
+                                                        <constraint firstAttribute="height" constant="128" id="jWd-4S-x7X"/>
+                                                    </constraints>
                                                 </imageView>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="2lq-9E-XpU" firstAttribute="leading" secondItem="pfH-0L-r7G" secondAttribute="leading" constant="144" id="5f2-dF-Ddm"/>
-                                                <constraint firstItem="BaE-IJ-BuS" firstAttribute="top" secondItem="pfH-0L-r7G" secondAttribute="bottom" constant="-2" id="Ag3-Vr-gZn"/>
                                                 <constraint firstItem="pfH-0L-r7G" firstAttribute="leading" secondItem="dvA-6a-9E0" secondAttribute="leadingMargin" constant="12" id="Djs-uA-wbB"/>
                                                 <constraint firstItem="2lq-9E-XpU" firstAttribute="top" secondItem="dvA-6a-9E0" secondAttribute="topMargin" constant="-16" id="DsU-AC-ekL"/>
+                                                <constraint firstItem="2lq-9E-XpU" firstAttribute="leading" secondItem="BaE-IJ-BuS" secondAttribute="trailing" constant="9" id="Olf-y7-cZg"/>
                                                 <constraint firstItem="2lq-9E-XpU" firstAttribute="top" secondItem="pfH-0L-r7G" secondAttribute="top" id="U9S-ux-0yQ"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="2lq-9E-XpU" secondAttribute="trailing" constant="20" id="auZ-D2-O5N"/>
-                                                <constraint firstItem="BaE-IJ-BuS" firstAttribute="bottom" secondItem="dvA-6a-9E0" secondAttribute="bottomMargin" id="eS7-SS-Xal"/>
+                                                <constraint firstItem="BaE-IJ-BuS" firstAttribute="bottom" secondItem="dvA-6a-9E0" secondAttribute="bottomMargin" id="UI4-eO-kVq"/>
+                                                <constraint firstItem="BaE-IJ-BuS" firstAttribute="leading" secondItem="dvA-6a-9E0" secondAttribute="leadingMargin" constant="12" id="cFf-dw-cZg"/>
                                                 <constraint firstItem="2lq-9E-XpU" firstAttribute="bottom" secondItem="pfH-0L-r7G" secondAttribute="bottom" constant="134" id="fna-88-Wwu"/>
-                                                <constraint firstItem="BaE-IJ-BuS" firstAttribute="leading" secondItem="dvA-6a-9E0" secondAttribute="leadingMargin" constant="12" id="gjy-Xx-DkN"/>
-                                                <constraint firstItem="BaE-IJ-BuS" firstAttribute="trailing" secondItem="pfH-0L-r7G" secondAttribute="trailing" priority="999" constant="-10" id="rRi-pP-YTT"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="2lq-9E-XpU" secondAttribute="trailing" constant="14" id="hqF-u9-aUO"/>
                                                 <constraint firstAttribute="bottom" secondItem="2lq-9E-XpU" secondAttribute="bottom" id="yG7-T3-AIs"/>
                                             </constraints>
                                         </tableViewCellContentView>
