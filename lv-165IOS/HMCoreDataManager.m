@@ -13,6 +13,7 @@
 #import "Comments.h"
 #import "DescriptionInfo.h"
 #import "Comments.h"
+#import "User.h"
 
 @implementation HMCoreDataManager
 
@@ -91,21 +92,24 @@
     double latDounble = [[placeNSDictionary valueForKey:@"lat"] doubleValue];
     place.lat = [NSNumber numberWithDouble:latDounble];
     
-    Description* description = [NSEntityDescription insertNewObjectForEntityForName:@"Description"
+    User* user = [NSEntityDescription insertNewObjectForEntityForName:@"User"
                                                              inManagedObjectContext:[self managedObjectContext]];
     
-    NSLog(@"description l = %@", [placeNSDictionary objectForKey:@"description"]);
+    NSDictionary *userDictionary = [placeNSDictionary objectForKey:@"user"];
+    
+    NSInteger userID = [[userDictionary valueForKey:@"id"] integerValue];
+    user.id = [NSNumber numberWithInteger:userID];
+    user.name = [userDictionary valueForKey:@"name"];
+    place.user = user;
+    
+    Description* description = [NSEntityDescription insertNewObjectForEntityForName:@"Description"
+                                                             inManagedObjectContext:[self managedObjectContext]];
 
     //description.language = [NSString stringWithFormat:@"%@", [[placeNSDictionary objectForKey:@"description"] allKeys]];
     //only English language, yet
     description.language = @"en_UK";
     
     if (comCountInteger) {
-//        for (NSString *dict in [placeNSDictionary objectForKey:@"comments"]) {
-//            NSLog(@"%@", [dict valueForKey:comment]);
-//            comment.comment = [dict valueForKey:comment];
-//            [place addCommentsObject:comment];
-//        }
         
         NSArray *array = [placeNSDictionary objectForKey:@"comments"];
         for (NSDictionary *coment in array) {
@@ -114,6 +118,16 @@
             comment.comment = [coment valueForKey:@"comment"];
             NSInteger commentId = [[placeNSDictionary valueForKey:@"comments_count"] integerValue];
             comment.id = [NSNumber numberWithInteger:commentId];
+            
+            NSDictionary *userArray = [coment objectForKey:@"user"];
+            User *user = [NSEntityDescription insertNewObjectForEntityForName:@"User"
+                                                              inManagedObjectContext:[self managedObjectContext]];
+            
+            NSInteger userId = [[userArray valueForKey:@"id"] integerValue];
+            user.id = [NSNumber numberWithInteger:userId];
+            user.name = [userArray valueForKey:@"name"];
+            
+            comment.user = user;
             [place addCommentsObject:comment];
         }
     }
@@ -162,13 +176,6 @@
     NSArray* resultArray = [self.managedObjectContext executeFetchRequest:request error:&requestError];
     NSLog(@"Print Country Entities %@",resultArray);
 }
-//
-//- (void) printAllObjects {
-//    
-//    NSArray* allObjects = [self allObjects];
-//    
-//}
-
 
 - (NSArray*) allObjects {
     

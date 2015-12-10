@@ -14,9 +14,12 @@
 #import "DescriptionInfo.h"
 #import "Countries.h"
 #import "Comments.h"
+#import "User.h"
 #import <MapKit/MapKit.h>
 
 @interface HMCommentsTableViewController ()
+
+@property(strong, nonatomic)DescriptionInfo *descriptionInfo;
 
 @end
 
@@ -28,15 +31,12 @@ static NSString* const CellIdentifier = @"DynamicTableViewCell";
     [super viewDidLoad];
 
     NSArray *array = self.create.descript.allObjects;
-    //NSArray *commentsArray = self.create.comments.allObjects;
-    self.commentsArray = self.create.comments.allObjects;
-    
+
     Description *description = [array objectAtIndex:0];
-    DescriptionInfo *descriptionInfo = description.descriptInfo;
-    //Comments *comments = commentsArray;
     
-    self.descriptionString = descriptionInfo.descriptionString;
-    
+    self.commentsArray = self.create.comments.allObjects;
+    self.descriptionInfo = description.descriptInfo;
+
     [[self navigationController] setNavigationBarHidden:NO animated:YES];
 }
 
@@ -44,28 +44,52 @@ static NSString* const CellIdentifier = @"DynamicTableViewCell";
 
 - (void)setUpCell:(HMDynamicTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     
-    if (indexPath.row == 0) {
-        cell.label.text = self.descriptionString;
+    if (indexPath.section == 0) {
+        cell.label.text = self.descriptionInfo.descriptionString;
     }
-    else  if (indexPath.row >= 1){
-        Comments *comments = [self.commentsArray objectAtIndex:(indexPath.row-1)];
+    else  if (indexPath.section >= 1){
+        Comments *comments = [self.commentsArray objectAtIndex:(indexPath.section-1)];
         cell.label.text = comments.comment;
     }
 }
 
 # pragma mark - UITableViewControllerDelegate
 
-//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-//    return 1;
-//}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (self.descriptionString) {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    if (self.descriptionInfo.descriptionString) {
         return [self.commentsArray count] + 1;
     }
     else {
         return [self.commentsArray count];
     }
+}
+
+- (nullable NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    if (section == 0) {
+        if (self.create.user.name == nil) {
+            return @"Anonym";
+        }
+        else {
+            return self.create.user.name;
+        }
+    }
+    else if (section >= 1){
+        Comments *comments = [self.commentsArray objectAtIndex:(section-1)];
+        if (comments.user.name == nil) {
+            return @"Anonym";
+        }
+        else {
+            return comments.user.name;
+        }
+    }
+    else {
+        return @"";
+    }
+    
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

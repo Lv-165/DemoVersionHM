@@ -19,6 +19,7 @@
 #import "HMMapAnnotation.h"
 #import "SVGeocoder.h"
 #import "HMCommentsTableViewController.h"
+#import "HMAnnotationView.h"
 
 @interface HMMapViewController ()
 
@@ -473,8 +474,8 @@ static bool isMainRoute;
 
     MKAnnotationView* annotationView = [sender superAnnotationView];
     
-    NSString *str = [NSString stringWithFormat:@"%@",
-                     annotationView.annotation.title];
+    NSString *str = [NSString stringWithFormat:@"%ld",
+                     (long)((HMMapAnnotation *)annotationView.annotation).idPlace];
 
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"id LIKE %@", str];
     
@@ -571,6 +572,7 @@ static bool isMainRoute;
         CLLocationCoordinate2D coordinate;
         coordinate.latitude = [place.lat doubleValue];
         coordinate.longitude = [place.lon doubleValue];
+    
         if ([place.rating intValue] == 0) {
             annotation.ratingForColor = senseLess;
         } else if (([place.rating intValue] >= 1) && ([place.rating intValue] <= 3)) {
@@ -580,10 +582,11 @@ static bool isMainRoute;
         }
      
         annotation.coordinate = coordinate;
-        annotation.title = [NSString stringWithFormat:@"%@", place.id];
+        annotation.title = [NSString stringWithFormat:@"Rating = %@", place.rating];
         annotation.subtitle = [NSString stringWithFormat:@"%.5g, %.5g",
                                annotation.coordinate.latitude,
                                annotation.coordinate.longitude];
+        annotation.idPlace = [place.id integerValue];
         
         [_clusteredAnnotations addObject:annotation];
         

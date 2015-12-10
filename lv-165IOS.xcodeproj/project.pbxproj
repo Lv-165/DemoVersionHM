@@ -150,6 +150,7 @@
 		308A5CDC1C173620009DD439 /* UICellForInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICellForInfo.h; sourceTree = "<group>"; };
 		308A5CDD1C173620009DD439 /* UICellForInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICellForInfo.m; sourceTree = "<group>"; };
 		7F2F73231C0362BD001A2BFF /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		7F8A95901C19AFA800ECDD88 /* HMAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMAnnotationView.h; sourceTree = "<group>"; };
 		7FA55BDF1C0DAFC700B99CC1 /* HMDownloadCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMDownloadCellTableViewCell.h; sourceTree = "<group>"; };
 		7FA55BE01C0DAFC700B99CC1 /* HMDownloadCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HMDownloadCellTableViewCell.m; sourceTree = "<group>"; };
 		7FA55BE61C0DB08200B99CC1 /* UIView+HMUItableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+HMUItableViewCell.h"; sourceTree = "<group>"; };
@@ -411,6 +412,7 @@
 				843905831C18E3DC00450FA8 /* HMDynamicTableViewCell.m */,
 				843905841C18E3DC00450FA8 /* HMCommentsTableViewController.h */,
 				843905851C18E3DC00450FA8 /* HMCommentsTableViewController.m */,
+				7F8A95901C19AFA800ECDD88 /* HMAnnotationView.h */,
 			);
 			name = Comments;
 			sourceTree = "<group>";
