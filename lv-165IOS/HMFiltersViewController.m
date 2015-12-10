@@ -22,17 +22,22 @@ static NSString* kSettingsCommentsLanguage = @"commentsLanguage";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.view.translatesAutoresizingMaskIntoConstraints = NO;
+    UIImage *remontImage = [UIImage imageNamed:@"remont"];
+    self.commentImage = [[UIImageView alloc] initWithImage:remontImage];
+    [self.view addSubview:self.commentImage];
+    
     [self loadSettings];
-
+    
     [[self navigationController] setNavigationBarHidden:NO animated:YES];
     
-     // Initialize Data
+    // Initialize Data
     self.dataSource = [NSArray arrayWithObjects:@"EN",@"GB",@"FR",@"UA", nil];
-     // Connect data
+    // Connect data
     self.pickerView.delegate = self;
     self.pickerView.dataSource = self;
     
-
 }
 - (void)viewDidUnload
 {
@@ -69,19 +74,19 @@ static NSString* kSettingsCommentsLanguage = @"commentsLanguage";
     
     [userDefaults setBool:self.commentsSwitch.isOn forKey:kSettingsComments];
     [userDefaults setInteger:self.ratingControl.selectedSegmentIndex forKey:kSettingsRating];
-//   [userDefaults setObject:self.commentLanguagePicker. forKey:<#(nonnull NSString *)#>]
+    [userDefaults setInteger:[self.pickerView selectedRowInComponent:0] forKey:kSettingsCommentsLanguage];
     
-
-  
     [userDefaults synchronize];
 }
 
 - (void) loadSettings {
     
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-
+    
     self.commentsSwitch.on = [userDefaults boolForKey:kSettingsComments];
     self.ratingControl.selectedSegmentIndex = [userDefaults integerForKey:kSettingsRating];
+    //self.pickerView. =[userDefaults integerForKey:kSettingsCommentsLanguage];//picker data downloading
+    
     
 }
 
@@ -96,6 +101,7 @@ static NSString* kSettingsCommentsLanguage = @"commentsLanguage";
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 
 
 @end

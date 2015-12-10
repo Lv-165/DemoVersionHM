@@ -12,7 +12,7 @@
 
 @property (weak, nonatomic) IBOutlet UISwitch *commentsSwitch;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *ratingControl;
-@property (weak, nonatomic) IBOutlet UIPickerView *commentLanguagePicker;
+@property (weak, nonatomic) IBOutlet UIImageView *commentImage;
 
 
 

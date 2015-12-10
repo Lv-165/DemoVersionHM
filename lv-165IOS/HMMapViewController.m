@@ -57,30 +57,24 @@ static bool isMainRoute;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    _clusteredAnnotations = nil;
     
     self.locationManager = [[CLLocationManager alloc] init];
-#warning USER DEFAULT
-    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(showPlace:)
                                                  name:showPlaceNotificationCenter object:nil];
-    
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
     self.ratingOfPoints = [userDefaults integerForKey:kSettingsRating];
     self.pointHasComments = [userDefaults boolForKey:kSettingsComments];
     
-    NSLog(@" rating of points %@",[NSString stringWithFormat:@"%ld",(long)self.ratingOfPoints]);
-    NSLog(@" point has comments %@",[NSString stringWithFormat:@"%ld",(long)self.pointHasComments]);
-    NSLog(@" Points in map array %lu",(unsigned long)[self.mapPointArray count]);
-    
     [[NSOperationQueue new] addOperationWithBlock:^{
-        double scale =
-        _mapView.bounds.size.width / self.mapView.visibleMapRect.size.width;
-       //NSArray *annotations = [self.clusteringManager clusteredAnnotationsWithinMapRect:_mapView.visibleMapRect  withZoomScale:scale];
+        //        double scale =
+        //        _mapView.bounds.size.width / self.mapView.visibleMapRect.size.width;
         
         self.clusteringManager = [[FBClusteringManager alloc]initWithAnnotations:_clusteredAnnotations];
         [self.clusteringManager displayAnnotations:_clusteredAnnotations onMapView:_mapView];
-
+        
     }];
     
     // Check for iOS 8. Without this guard the code will crash with "unknown selector" on iOS 7.
@@ -88,11 +82,11 @@ static bool isMainRoute;
         [self.locationManager requestWhenInUseAuthorization];
     }
     UIBarButtonItem *flexibleItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-//    flexibleItem.
+    
     
     UIButton *yourCurrentLocation = [UIButton buttonWithType:UIButtonTypeCustom];
     [yourCurrentLocation setBackgroundImage:[UIImage imageNamed:@"compass"]
-                           forState:UIControlStateNormal];
+                                   forState:UIControlStateNormal];
     [yourCurrentLocation addTarget:self action:@selector(showYourCurrentLocation:) forControlEvents:UIControlEventTouchUpInside];
     yourCurrentLocation.frame = CGRectMake(0, 0, 30, 30);
     yourCurrentLocation.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
@@ -102,7 +96,7 @@ static bool isMainRoute;
     
     UIButton *moveToSettingsController = [UIButton buttonWithType:UIButtonTypeCustom];
     [moveToSettingsController setBackgroundImage:[UIImage imageNamed:@"tools"]
-                                  forState:UIControlStateNormal];
+                                        forState:UIControlStateNormal];
     [moveToSettingsController addTarget:self action:@selector(moveToToolsController:) forControlEvents:UIControlEventTouchUpInside];
     moveToSettingsController.frame = CGRectMake(0, 0, 30, 30);
     moveToSettingsController.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
@@ -112,49 +106,61 @@ static bool isMainRoute;
     
     UIButton *searchButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [searchButton setBackgroundImage:[UIImage imageNamed:@"Lupa"]
-                                      forState:UIControlStateNormal];
+                            forState:UIControlStateNormal];
     [searchButton addTarget:self action:@selector(buttonSearch:) forControlEvents:UIControlEventTouchUpInside];
     searchButton.frame = CGRectMake(0, 0, 30, 30);
     searchButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
     UIView *viewForSearchButton = [[UIView alloc] initWithFrame:CGRectMake(0, 30, 30, 30)];
     [viewForSearchButton addSubview:searchButton];
     UIBarButtonItem *buttonSearchButton = [[UIBarButtonItem alloc] initWithCustomView:viewForSearchButton];
-
+    
     
     
     UIButton *moveToFilterController = [UIButton buttonWithType:UIButtonTypeCustom];
     [moveToFilterController setBackgroundImage:[UIImage imageNamed:@"filter"]
-                                       forState:UIControlStateNormal];
+                                      forState:UIControlStateNormal];
     [moveToFilterController addTarget:self action:@selector(moveToFilterController:) forControlEvents:UIControlEventTouchUpInside];
     moveToFilterController.frame = CGRectMake(0, 0, 30, 30);
     moveToFilterController.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
     UIView *viewForMoveToFilterController = [[UIView alloc] initWithFrame:CGRectMake(0, 30, 30, 30)];
     [viewForMoveToFilterController addSubview:moveToFilterController];
     UIBarButtonItem *buttonForMoveToFilterController = [[UIBarButtonItem alloc] initWithCustomView:viewForMoveToFilterController];
-
+    
     
     NSArray *buttons = @[ buttonForShowCurrentLocation ,flexibleItem , buttonSearchButton , flexibleItem , buttonForMoveToFilterController , flexibleItem, buttonForMoveToSettingsController ];
+    
+    //    [self printPointWithContinent];
+    //    NSLog(@" Points in map array %lu",(unsigned long)[self.mapPointArray count]);
     
     [self.downToolBar setItems:buttons animated:NO];
     
     self.mapView.showsUserLocation = YES;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                              selector:@selector(receiveChangeMapTypeNotification:)
-                                                  name:@"ChangeMapTypeNotification"
-                                                object:nil];
+                                             selector:@selector(receiveChangeMapTypeNotification:)
+                                                 name:@"ChangeMapTypeNotification"
+                                               object:nil];
     
-    [self printPointWithContinent];
     
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Countries"
-                                              inManagedObjectContext:self.managedObjectContext];
-    [fetchRequest setEntity:entity];
+    NSLog(@" rating of points %@",[NSString stringWithFormat:@"%ld",(long)self.ratingOfPoints]);
+    NSLog(@" point has comments %@",self.pointHasComments ? @"Yes" : @"No");
+    
     
 }
 
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    self.clusteringManager = [[FBClusteringManager alloc]initWithAnnotations:_clusteredAnnotations];
+    [self.clusteringManager displayAnnotations:_clusteredAnnotations onMapView:_mapView];
+    
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    self.ratingOfPoints = [userDefaults integerForKey:kSettingsRating];
+    self.pointHasComments = [userDefaults boolForKey:kSettingsComments];
+    [self printPointWithContinent];
+    
+    NSLog(@" Points in map array %lu",(unsigned long)[self.mapPointArray count]);
     
     [[self navigationController] setNavigationBarHidden:YES animated:YES];
 }
@@ -527,52 +533,54 @@ static bool isMainRoute;
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Place"];
     
-    NSInteger ratingForPoints;
+    NSInteger minForPoint = 0;
+    NSInteger maxForPoint = 5;
     
     switch (self.ratingOfPoints) {
         case 0:
-            ratingForPoints = 0;
+            minForPoint = 0;
+            maxForPoint = 5;
             break;
         case 1:
-            ratingForPoints = 4;// second segment control inform to take 4 >= rating points
+            minForPoint = 1;
+            maxForPoint = 3;
             break;
         case 2:
-            ratingForPoints = 5;// third segment control inform to take only 5 rating points
+            minForPoint = 4;
+            maxForPoint = 5;
             break;
             
         default:
             break;
     }
     
-    NSPredicate* ratingPredicate = [NSPredicate predicateWithFormat:@"rating >= %@",[NSString stringWithFormat:@"%ld",self.ratingOfPoints]];
+    NSPredicate* ratingPredicate = [NSPredicate predicateWithFormat:@"%@ => rating  AND rating >= %@",[NSString stringWithFormat:@" %ld",(long)maxForPoint],[NSString stringWithFormat:@" %ld",(long)minForPoint]];
     
-    if(self.pointHasComments) {
+    if(!self.pointHasComments) {
         [fetchRequest setPredicate:ratingPredicate];
     } else {
         
-        NSPredicate* commentsCountPredicate = [NSPredicate predicateWithFormat:@"comments_count > %@",@"0"];
+        NSPredicate* commentsCountPredicate = [NSPredicate predicateWithFormat:@"comments_count > %@",@0];
         
-        NSPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects:ratingPredicate, ratingPredicate, nil]];
+        NSPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects:ratingPredicate, commentsCountPredicate, nil]];
         
-        [fetchRequest setPredicate:compoundPredicate];}
+        [fetchRequest setPredicate:compoundPredicate];
+    }
     
     self.mapPointArray = [[managedObjectContext executeFetchRequest:fetchRequest
                                                               error:nil] mutableCopy];
     
+    NSLog(@"MAP annotation array count %lu",(unsigned long)self.mapPointArray.count);
+    
     _clusteredAnnotations = [NSMutableArray new];
     
     for (Place* place in self.mapPointArray) {
-        
-#warning Print all objects!!!
-        
-        //  NSLog(@"\nid = %@, lat = %@, lon = %@ Rating = %@ COMMENTS - %@",place.id, place.lat, place.lon,place.rating,place.comments_count);
         
         HMMapAnnotation *annotation = [[HMMapAnnotation alloc] init];
         
         CLLocationCoordinate2D coordinate;
         coordinate.latitude = [place.lat doubleValue];
         coordinate.longitude = [place.lon doubleValue];
-    
         if ([place.rating intValue] == 0) {
             annotation.ratingForColor = senseLess;
         } else if (([place.rating intValue] >= 1) && ([place.rating intValue] <= 3)) {
@@ -580,21 +588,20 @@ static bool isMainRoute;
         } else {
             annotation.ratingForColor = goodRaing;
         }
-     
+        
         annotation.coordinate = coordinate;
-        annotation.title = [NSString stringWithFormat:@"Rating = %@", place.rating];
+        annotation.title = [NSString stringWithFormat:@"%@", place.id];
         annotation.subtitle = [NSString stringWithFormat:@"%.5g, %.5g",
                                annotation.coordinate.latitude,
                                annotation.coordinate.longitude];
-        annotation.idPlace = [place.id integerValue];
         
         [_clusteredAnnotations addObject:annotation];
         
         [self.mapView addAnnotation:annotation];
     }
-
+    
     self.clusteringManager = [[FBClusteringManager alloc] initWithAnnotations:_clusteredAnnotations];
-
+    
 }
 
 #pragma mark - methods for Notification
