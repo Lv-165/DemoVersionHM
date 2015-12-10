@@ -279,10 +279,32 @@ static bool isMainRoute;
         return nil;
     } else if ([annotation isKindOfClass:[FBAnnotationCluster class]]) {
         // All clusters will have FBAnnotationCluster class, so when MKMapView delegate methods are called, you can check if current annotation is cluster by checking its class
-        FBAnnotationCluster *cluster = (FBAnnotationCluster *)annotation;
-        NSLog(@"Annotation is cluster. Number of annotations in cluster: %lu",
-              (unsigned long)cluster.annotations.count);
-    } 
+      FBAnnotationCluster *clusterAnnotation = annotation;
+    FBAnnotationClusterView *clusterAnnotationView =
+        [FBAnnotationClusterView new];
+
+    clusterAnnotationView.annotationLabel =
+        [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
+    clusterAnnotationView.annotationLabel.text = [NSString
+        stringWithFormat:@"%lu",
+                         (unsigned long)clusterAnnotation.annotations.count];
+    clusterAnnotationView.annotationLabel.textAlignment = NSTextAlignmentCenter;
+
+    clusterAnnotationView.annotationLabel.layer.borderColor =
+        [[UIColor colorWithRed:0.4379 green:0.6192 blue:0.7767 alpha:1.0]
+            CGColor];
+    clusterAnnotationView.annotationLabel.backgroundColor =
+        [UIColor clearColor];
+    clusterAnnotationView.annotationLabel.layer.borderWidth = 5;
+    clusterAnnotationView.annotationLabel.layer.cornerRadius = 25;
+    clusterAnnotationView.canShowCallout = NO;
+    clusterAnnotationView.draggable = NO;
+    clusterAnnotationView.annotationLabel.userInteractionEnabled = YES;
+    [clusterAnnotationView addSubview:clusterAnnotationView.annotationLabel];
+
+    return clusterAnnotationView;
+    }
+    else {
     
     MKPinAnnotationView* pin = (MKPinAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
     
@@ -331,6 +353,7 @@ static bool isMainRoute;
     pin.leftCalloutAccessoryView = directionButton;
     
     return pin;
+  }
 }
 
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
@@ -598,19 +621,14 @@ static bool isMainRoute;
   if ([touches count] == 1) {
     UITouch *touch = [touches anyObject];
     if (touch.view.subviews && [touch tapCount] == 1) {
-
       CGPoint point = [touch locationInView:self.view];
-      CLLocationCoordinate2D touchMapCoordinate =
-          [self.mapView convertPoint:point toCoordinateFromView:self.mapView];
-
       FBAnnotationClusterView *selectedAnnotationView;
       NSMutableArray *annotationsArray;
-      for (id View in touch.view.subviews) {
-
-        if ([View isMemberOfClass:[FBAnnotationClusterView class]]) {
+      for (id view in touch.view.subviews) {
+        if ([view isMemberOfClass:[FBAnnotationClusterView class]]) {
 
           FBAnnotationClusterView *annotationView =
-              (FBAnnotationClusterView *)View;
+              (FBAnnotationClusterView *)view;
           CGRect frame =
               [annotationView convertRect:annotationView.annotationLabel.frame
                                    toView:self.view];
@@ -620,8 +638,6 @@ static bool isMainRoute;
             for (HMMapAnnotation *annotation in annotationView.annotation
                      .annotations) {
               [annotationsArray addObject:annotation];
-              NSLog(@"ADDED %f %f", annotation.coordinate.latitude,
-                    annotation.coordinate.latitude);
             }
             selectedAnnotationView = annotationView;
             break;
