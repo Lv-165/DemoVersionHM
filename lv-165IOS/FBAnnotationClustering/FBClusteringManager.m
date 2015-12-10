@@ -113,7 +113,11 @@ CGFloat FBCellSizeForZoomScale(MKZoomScale zoomScale)
     if ([self.delegate respondsToSelector:@selector(cellSizeFactorForCoordinator:)]) {
         cellSize *= [self.delegate cellSizeFactorForCoordinator:self];
     }
+<<<<<<< HEAD
     double scaleFactor = zoomScale / cellSize;
+=======
+    double scaleFactor = zoomScale / cellSize /1.5;
+>>>>>>> c1330b659402c73d6f0e51097e06b3ec80de27f0
     
     NSInteger minX = floor(MKMapRectGetMinX(rect) * scaleFactor);
     NSInteger maxX = floor(MKMapRectGetMaxX(rect) * scaleFactor);
@@ -144,11 +148,19 @@ CGFloat FBCellSizeForZoomScale(MKZoomScale zoomScale)
             }];
             
             NSInteger count = [annotations count];
+<<<<<<< HEAD
             if (count == 1) {
                 [clusteredAnnotations addObjectsFromArray:annotations];
             }
             
             if (count > 1) {
+=======
+            if (count < 4) {
+                [clusteredAnnotations addObjectsFromArray:annotations];
+            }
+            
+            if (count > 3) {
+>>>>>>> c1330b659402c73d6f0e51097e06b3ec80de27f0
                 CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(totalLatitude/count, totalLongitude/count);
                 FBAnnotationCluster *cluster = [[FBAnnotationCluster alloc] init];
                 cluster.coordinate = coordinate;
