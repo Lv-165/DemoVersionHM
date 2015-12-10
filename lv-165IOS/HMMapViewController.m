@@ -66,9 +66,6 @@ static bool isMainRoute;
     self.ratingOfPoints = [userDefaults integerForKey:kSettingsRating];
     self.pointHasComments = [userDefaults boolForKey:kSettingsComments];
     
-    NSLog(@" rating of points %@",[NSString stringWithFormat:@"%ld",(long)self.ratingOfPoints]);
-    NSLog(@" point has comments %@",[NSString stringWithFormat:@"%ld",(long)self.pointHasComments]);
-    NSLog(@" Points in map array %lu",(unsigned long)[self.mapPointArray count]);
     
     [[NSOperationQueue new] addOperationWithBlock:^{
         double scale =
@@ -142,6 +139,11 @@ static bool isMainRoute;
                                                 object:nil];
     
     [self printPointWithContinent];
+    
+    NSLog(@" rating of points %@",[NSString stringWithFormat:@"%ld",(long)self.ratingOfPoints]);
+    NSLog(@" point has comments %@",[NSString stringWithFormat:@"%ld",(long)self.pointHasComments]);
+    NSLog(@" Points in map array %lu",(unsigned long)[self.mapPointArray count]);
+
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Countries"
@@ -575,13 +577,14 @@ static bool isMainRoute;
     self.mapPointArray = [[managedObjectContext executeFetchRequest:fetchRequest
                                                               error:nil] mutableCopy];
     
+    NSLog(@"MAP annotation array%@",self.mapPointArray);
+    
     _clusteredAnnotations = [NSMutableArray new];
+    
     
     for (Place* place in self.mapPointArray) {
         
 #warning Print all objects!!!
-        
-        //  NSLog(@"\nid = %@, lat = %@, lon = %@ Rating = %@ COMMENTS - %@",place.id, place.lat, place.lon,place.rating,place.comments_count);
         
         HMMapAnnotation *annotation = [[HMMapAnnotation alloc] init];
         
