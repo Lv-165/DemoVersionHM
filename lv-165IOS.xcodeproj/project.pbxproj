@@ -56,6 +56,7 @@
 		841135671C124399004AEDCA /* Country.m in Sources */ = {isa = PBXBuildFile; fileRef = 841135551C124399004AEDCA /* Country.m */; };
 		843905861C18E3DC00450FA8 /* HMDynamicTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 843905831C18E3DC00450FA8 /* HMDynamicTableViewCell.m */; };
 		843905871C18E3DC00450FA8 /* HMCommentsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 843905851C18E3DC00450FA8 /* HMCommentsTableViewController.m */; };
+		844D79741C1903B700B18927 /* FBAnnotationClusterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 844D79721C1903B700B18927 /* FBAnnotationClusterView.m */; };
 		A10299261C0F153E00BA5896 /* HMMapAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = A10299251C0F153E00BA5896 /* HMMapAnnotation.m */; };
 		A10299291C0F1A7800BA5896 /* UIView+MKAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = A10299281C0F1A7800BA5896 /* UIView+MKAnnotationView.m */; };
 		A1C5EDE41C0CA7C900F94400 /* HMSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1C5EDE21C0CA7C900F94400 /* HMSettingsViewController.m */; };
@@ -198,6 +199,8 @@
 		843905831C18E3DC00450FA8 /* HMDynamicTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HMDynamicTableViewCell.m; sourceTree = "<group>"; };
 		843905841C18E3DC00450FA8 /* HMCommentsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMCommentsTableViewController.h; sourceTree = "<group>"; };
 		843905851C18E3DC00450FA8 /* HMCommentsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HMCommentsTableViewController.m; sourceTree = "<group>"; };
+		844D79721C1903B700B18927 /* FBAnnotationClusterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FBAnnotationClusterView.m; path = FBAnnotationClustering/FBAnnotationClusterView.m; sourceTree = "<group>"; };
+		844D79731C1903B700B18927 /* FBAnnotationClusterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FBAnnotationClusterView.h; path = FBAnnotationClustering/FBAnnotationClusterView.h; sourceTree = "<group>"; };
 		A10299241C0F153E00BA5896 /* HMMapAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMMapAnnotation.h; sourceTree = "<group>"; };
 		A10299251C0F153E00BA5896 /* HMMapAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HMMapAnnotation.m; sourceTree = "<group>"; };
 		A10299271C0F1A7800BA5896 /* UIView+MKAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+MKAnnotationView.h"; sourceTree = "<group>"; };
@@ -266,6 +269,8 @@
 		0C93B26C1C11DB840032A3AE /* FBAnnotationClustering */ = {
 			isa = PBXGroup;
 			children = (
+				844D79721C1903B700B18927 /* FBAnnotationClusterView.m */,
+				844D79731C1903B700B18927 /* FBAnnotationClusterView.h */,
 				0C93B2761C11DECB0032A3AE /* FBAnnotationCluster.h */,
 				0C93B2771C11DECB0032A3AE /* FBAnnotationCluster.m */,
 				0C93B2781C11DECB0032A3AE /* FBAnnotationClustering.h */,
@@ -700,6 +705,7 @@
 				A1C5EDEB1C0CC4D500F94400 /* HMSearchViewController.m in Sources */,
 				0C93B2821C11DECB0032A3AE /* FBQuadTreeNode.m in Sources */,
 				841135671C124399004AEDCA /* Country.m in Sources */,
+				844D79741C1903B700B18927 /* FBAnnotationClusterView.m in Sources */,
 				302A11D31C0371C3002F8FF0 /* UIAlertView+AFNetworking.m in Sources */,
 				841135591C124399004AEDCA /* Comments.m in Sources */,
 				C0E1A8181C18504500F0DF00 /* HMFiltersViewController.m in Sources */,

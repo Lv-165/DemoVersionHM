@@ -68,17 +68,7 @@ static bool isMainRoute;
     self.ratingOfPoints = [userDefaults integerForKey:kSettingsRating];
     self.pointHasComments = [userDefaults boolForKey:kSettingsComments];
     
-    
-    [[NSOperationQueue new] addOperationWithBlock:^{
-        double scale =
-        _mapView.bounds.size.width / self.mapView.visibleMapRect.size.width;
-       //NSArray *annotations = [self.clusteringManager clusteredAnnotationsWithinMapRect:_mapView.visibleMapRect  withZoomScale:scale];
-        
-        self.clusteringManager = [[FBClusteringManager alloc]initWithAnnotations:_clusteredAnnotations];
-        [self.clusteringManager displayAnnotations:_clusteredAnnotations onMapView:_mapView];
 
-    }];
-    
     // Check for iOS 8. Without this guard the code will crash with "unknown selector" on iOS 7.
     if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
         [self.locationManager requestWhenInUseAuthorization];
@@ -347,9 +337,10 @@ static bool isMainRoute;
 {
     [[NSOperationQueue new] addOperationWithBlock:^{
         double scale = self.mapView.bounds.size.width / self.mapView.visibleMapRect.size.width;
-        NSArray *annotations = [self.clusteringManager clusteredAnnotationsWithinMapRect:mapView.visibleMapRect withZoomScale:scale];
-        
-        [self.clusteringManager displayAnnotations:annotations onMapView:mapView];
+    NSArray *annotations = [self.clusteringManager
+        clusteredAnnotationsWithinMapRect:mapView.visibleMapRect
+                            withZoomScale:scale];
+    [self.clusteringManager displayAnnotations:annotations onMapView:mapView];
     }];
 }
 
@@ -589,12 +580,7 @@ static bool isMainRoute;
                                annotation.coordinate.longitude];
         
         [_clusteredAnnotations addObject:annotation];
-        
-        [self.mapView addAnnotation:annotation];
     }
-
-    self.clusteringManager = [[FBClusteringManager alloc] initWithAnnotations:_clusteredAnnotations];
-
 }
 
 #pragma mark - methods for Notification
@@ -607,5 +593,72 @@ static bool isMainRoute;
     [self.mapView setRegion:[self.mapView regionThatFits:region] animated:YES];
 }
 
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+
+  if ([touches count] == 1) {
+    UITouch *touch = [touches anyObject];
+    if (touch.view.subviews && [touch tapCount] == 1) {
+
+      CGPoint point = [touch locationInView:self.view];
+      CLLocationCoordinate2D touchMapCoordinate =
+          [self.mapView convertPoint:point toCoordinateFromView:self.mapView];
+
+      FBAnnotationClusterView *selectedAnnotationView;
+      NSMutableArray *annotationsArray;
+      for (id View in touch.view.subviews) {
+
+        if ([View isMemberOfClass:[FBAnnotationClusterView class]]) {
+
+          FBAnnotationClusterView *annotationView =
+              (FBAnnotationClusterView *)View;
+          CGRect frame =
+              [annotationView convertRect:annotationView.annotationLabel.frame
+                                   toView:self.view];
+
+          if (CGRectContainsPoint(frame, point)) {
+            annotationsArray = [NSMutableArray new];
+            for (HMMapAnnotation *annotation in annotationView.annotation
+                     .annotations) {
+              [annotationsArray addObject:annotation];
+              NSLog(@"ADDED %f %f", annotation.coordinate.latitude,
+                    annotation.coordinate.latitude);
+            }
+            selectedAnnotationView = annotationView;
+            break;
+          }
+        }
+      }
+
+      NSArray *array = [selectedAnnotationView.annotation.annotations copy];
+      [self.mapView showAnnotations:array animated:YES];
+
+      [[NSOperationQueue new] addOperationWithBlock:^{
+        double scale = self.mapView.bounds.size.width /
+                       self.mapView.visibleMapRect.size.width;
+
+        NSArray *annotations = [self.clusteringManager
+            clusteredAnnotationsWithinMapRect:self.mapView.visibleMapRect
+                                withZoomScale:scale];
+
+        [self.clusteringManager displayAnnotations:annotations
+                                         onMapView:self.mapView];
+      }];
+    }
+  }
+}
+
+- (void)mapViewDidFinishRenderingMap:(MKMapView *)mapView fullyRendered:(BOOL)fullyRendered
+{
+  if(!self.clusteringManager){
+
+    [[NSOperationQueue new] addOperationWithBlock:^{
+        double scale =
+        _mapView.bounds.size.width / self.mapView.visibleMapRect.size.width;
+        self.clusteringManager = [[FBClusteringManager alloc]initWithAnnotations:_clusteredAnnotations];
+                NSArray *annotations = [self.clusteringManager clusteredAnnotationsWithinMapRect:_mapView.visibleMapRect withZoomScale:scale];
+        [self.clusteringManager displayAnnotations:annotations onMapView:_mapView];
+    }];
+ }
+}
 
 @end
