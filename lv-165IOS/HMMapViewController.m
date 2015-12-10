@@ -70,13 +70,11 @@ static bool isMainRoute;
     self.pointHasComments = [userDefaults boolForKey:kSettingsComments];
     
     [[NSOperationQueue new] addOperationWithBlock:^{
-        double scale =
-        _mapView.bounds.size.width / self.mapView.visibleMapRect.size.width;
-       //NSArray *annotations = [self.clusteringManager clusteredAnnotationsWithinMapRect:_mapView.visibleMapRect  withZoomScale:scale];
-        
-        
-        self.clusteringManager = [[FBClusteringManager alloc]initWithAnnotations:_clusteredAnnotations];
-        [self.clusteringManager displayAnnotations:_clusteredAnnotations onMapView:_mapView];
+//        double scale =
+//        _mapView.bounds.size.width / self.mapView.visibleMapRect.size.width;
+
+    self.clusteringManager = [[FBClusteringManager alloc]initWithAnnotations:_clusteredAnnotations];
+    [self.clusteringManager displayAnnotations:_clusteredAnnotations onMapView:_mapView];
 
     }];
     
@@ -85,7 +83,7 @@ static bool isMainRoute;
         [self.locationManager requestWhenInUseAuthorization];
     }
     UIBarButtonItem *flexibleItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-//    flexibleItem.
+
     
     UIButton *yourCurrentLocation = [UIButton buttonWithType:UIButtonTypeCustom];
     [yourCurrentLocation setBackgroundImage:[UIImage imageNamed:@"compass"]
