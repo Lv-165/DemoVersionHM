@@ -94,7 +94,7 @@
     Description* description = [NSEntityDescription insertNewObjectForEntityForName:@"Description"
                                                              inManagedObjectContext:[self managedObjectContext]];
     
-    NSLog(@"description l = %@", [placeNSDictionary objectForKey:@"description"]);
+//    NSLog(@"description l = %@", [placeNSDictionary objectForKey:@"description"]);
 
     //description.language = [NSString stringWithFormat:@"%@", [[placeNSDictionary objectForKey:@"description"] allKeys]];
     //only English language, yet

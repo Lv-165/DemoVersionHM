@@ -58,7 +58,9 @@ static bool isMainRoute;
     // Do any additional setup after loading the view, typically from a nib.
     
     self.locationManager = [[CLLocationManager alloc] init];
-#warning USER DEFAULT
+    
+    _clusteredAnnotations = nil;
+
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -67,7 +69,6 @@ static bool isMainRoute;
     
     self.ratingOfPoints = [userDefaults integerForKey:kSettingsRating];
     self.pointHasComments = [userDefaults boolForKey:kSettingsComments];
-    
     
     [[NSOperationQueue new] addOperationWithBlock:^{
         double scale =
@@ -131,6 +132,8 @@ static bool isMainRoute;
     
     NSArray *buttons = @[ buttonForShowCurrentLocation ,flexibleItem , buttonSearchButton , flexibleItem , buttonForMoveToFilterController , flexibleItem, buttonForMoveToSettingsController ];
     
+    [self printPointWithContinent];
+    
     [self.downToolBar setItems:buttons animated:NO];
     
     self.mapView.showsUserLocation = YES;
@@ -140,17 +143,17 @@ static bool isMainRoute;
                                                   name:@"ChangeMapTypeNotification"
                                                 object:nil];
     
-    [self printPointWithContinent];
+    
     
     NSLog(@" rating of points %@",[NSString stringWithFormat:@"%ld",(long)self.ratingOfPoints]);
-    NSLog(@" point has comments %@",[NSString stringWithFormat:@"%ld",(long)self.pointHasComments]);
+    NSLog(@" point has comments %@",self.pointHasComments ? @"Yes" : @"No");
     NSLog(@" Points in map array %lu",(unsigned long)[self.mapPointArray count]);
 
     
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Countries"
-                                              inManagedObjectContext:self.managedObjectContext];
-    [fetchRequest setEntity:entity];
+//    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+//    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Countries"
+//                                              inManagedObjectContext:self.managedObjectContext];
+//    [fetchRequest setEntity:entity];
     
 }
 
@@ -182,6 +185,10 @@ static bool isMainRoute;
                         edgePadding:UIEdgeInsetsMake(50, 50, 50, 50)
                            animated:YES];
     
+}
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    // Present your modal from here
 }
 
 - (void)moveToToolsController:(UIBarButtonItem *)sender {
@@ -243,7 +250,7 @@ static bool isMainRoute;
         if ([segue.identifier isEqualToString:@"showFilterViewController"]) {
             
             HMFiltersViewController *destViewController = segue.destinationViewController;
-            
+
         }
     else
         if ([segue.identifier isEqualToString:@"showSearchViewController"]) {
@@ -547,27 +554,26 @@ static bool isMainRoute;
     
     NSPredicate* ratingPredicate = [NSPredicate predicateWithFormat:@"rating >= %@",[NSString stringWithFormat:@"%ld",self.ratingOfPoints]];
     
-    if(self.pointHasComments) {
+    if(!self.pointHasComments) {
         [fetchRequest setPredicate:ratingPredicate];
     } else {
         
         NSPredicate* commentsCountPredicate = [NSPredicate predicateWithFormat:@"comments_count > %@",@"0"];
-        
-        NSPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects:ratingPredicate, ratingPredicate, nil]];
-        
-        [fetchRequest setPredicate:compoundPredicate];}
+    
+        NSPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects:ratingPredicate, commentsCountPredicate, nil]];
+    
+
+      [fetchRequest setPredicate:compoundPredicate];
+    }
     
     self.mapPointArray = [[managedObjectContext executeFetchRequest:fetchRequest
                                                               error:nil] mutableCopy];
     
-    NSLog(@"MAP annotation array%@",self.mapPointArray);
+    NSLog(@"MAP annotation array count %lu",(unsigned long)self.mapPointArray.count);
     
     _clusteredAnnotations = [NSMutableArray new];
-    
-    
+
     for (Place* place in self.mapPointArray) {
-        
-#warning Print all objects!!!
         
         HMMapAnnotation *annotation = [[HMMapAnnotation alloc] init];
         
