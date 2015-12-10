@@ -13,8 +13,9 @@
 typedef enum : NSUInteger {
     senseLess = 0,
     badRating,
-    goodRaing
+    veryGoodRating,
 } RatingForPin;
+
 
 @interface HMMapAnnotation : NSObject <HMAnnotationView>
 

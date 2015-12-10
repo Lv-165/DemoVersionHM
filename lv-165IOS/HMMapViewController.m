@@ -152,8 +152,8 @@ static bool isMainRoute;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    self.clusteringManager = [[FBClusteringManager alloc]initWithAnnotations:_clusteredAnnotations];
-    [self.clusteringManager displayAnnotations:_clusteredAnnotations onMapView:_mapView];
+//    self.clusteringManager = [[FBClusteringManager alloc]initWithAnnotations:_clusteredAnnotations];
+//    [self.clusteringManager displayAnnotations:_clusteredAnnotations onMapView:_mapView];
     
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
     self.ratingOfPoints = [userDefaults integerForKey:kSettingsRating];
@@ -161,6 +161,7 @@ static bool isMainRoute;
     [self printPointWithContinent];
     
     NSLog(@" Points in map array %lu",(unsigned long)[self.mapPointArray count]);
+    NSLog(@" point has comments %@",self.pointHasComments ? @"Yes" : @"No");
     
     [[self navigationController] setNavigationBarHidden:YES animated:YES];
 }
@@ -288,29 +289,34 @@ static bool isMainRoute;
 
 #pragma mark - Annotation View
 
-- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation {
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <HMAnnotationView>)annotation {
+    
     static NSString* identifier = @"Annotation";
+     MKPinAnnotationView* pin = (MKPinAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
     if ([annotation isKindOfClass:[MKUserLocation class]]) {
         return nil;
-    } else if ([annotation isKindOfClass:[FBAnnotationCluster class]]) {
-        // All clusters will have FBAnnotationCluster class, so when MKMapView delegate methods are called, you can check if current annotation is cluster by checking its class
-        FBAnnotationCluster *cluster = (FBAnnotationCluster *)annotation;
-        NSLog(@"Annotation is cluster. Number of annotations in cluster: %lu",
-              (unsigned long)cluster.annotations.count);
-    } 
+    }
     
-    MKPinAnnotationView* pin = (MKPinAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
+//    MKPinAnnotationView* pin = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
     
+    
+//    } else if ([annotation isKindOfClass:[FBAnnotationCluster class]]) {
+//        // All clusters will have FBAnnotationCluster class, so when MKMapView delegate methods are called, you can check if current annotation is cluster by checking its class
+//        FBAnnotationCluster *cluster = (FBAnnotationCluster *)annotation;
+//        NSLog(@"Annotation is cluster. Number of annotations in cluster: %lu",
+//              (unsigned long)cluster.annotations.count);
+//    } else {
+//        HMMapAnnotation *annotation = annotation;
+//    }
     if (!pin) {
         pin = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
-    }
-    if ([annotation isKindOfClass:[HMMapAnnotation class]]) {
+        
+    } 
+    
+    
+  
         switch (((HMMapAnnotation *)annotation).ratingForColor) {
-            case goodRaing:
-            {
-                pin.pinTintColor = [UIColor greenColor] ;
-                break;
-            }
+          
             case badRating:
             {
                 pin.pinTintColor = [UIColor redColor];
@@ -318,16 +324,17 @@ static bool isMainRoute;
             }
             case senseLess:
             {
-                pin.pinTintColor = [UIColor blueColor];
+                pin.pinTintColor = [UIColor whiteColor];
+                break;
+            }
+            case veryGoodRating:
+            {
+                pin.pinTintColor = [UIColor greenColor];
                 break;
             }
         }
-    } else {
-        pin.pinTintColor = [UIColor grayColor];
-    }
-    pin.animatesDrop = YES;
+    pin.animatesDrop = NO;
     pin.canShowCallout = YES;
-    
     
     UIButton* descriptionButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
     
@@ -583,24 +590,23 @@ static bool isMainRoute;
         coordinate.longitude = [place.lon doubleValue];
         if ([place.rating intValue] == 0) {
             annotation.ratingForColor = senseLess;
-        } else if (([place.rating intValue] >= 1) && ([place.rating intValue] <= 3)) {
+        } else if (([place.rating intValue] >=4) && ([place.rating intValue] <= 5)) {
             annotation.ratingForColor = badRating;
-        } else {
-            annotation.ratingForColor = goodRaing;
+        } else if (([place.rating intValue] >=1) && ([place.rating intValue] <= 3)) {
+            annotation.ratingForColor = veryGoodRating;
         }
-        
         annotation.coordinate = coordinate;
         annotation.title = [NSString stringWithFormat:@"%@", place.id];
         annotation.subtitle = [NSString stringWithFormat:@"%.5g, %.5g",
                                annotation.coordinate.latitude,
                                annotation.coordinate.longitude];
         
-        [_clusteredAnnotations addObject:annotation];
+        //[_clusteredAnnotations addObject:annotation];
         
         [self.mapView addAnnotation:annotation];
     }
     
-    self.clusteringManager = [[FBClusteringManager alloc] initWithAnnotations:_clusteredAnnotations];
+//    self.clusteringManager = [[FBClusteringManager alloc] initWithAnnotations:_clusteredAnnotations];
     
 }
 

@@ -473,13 +473,13 @@
                                             </constraints>
                                             <variation key="default">
                                                 <mask key="constraints">
-                                                    <exclude reference="k5y-4G-hXi"/>
                                                     <exclude reference="cNH-ew-YXi"/>
+                                                    <exclude reference="k5y-4G-hXi"/>
                                                     <exclude reference="mGd-ps-770"/>
                                                     <exclude reference="tRF-4L-FmU"/>
-                                                    <exclude reference="tcU-K1-Ex1"/>
                                                     <exclude reference="h8c-bj-fBh"/>
                                                     <exclude reference="kaA-Ta-KgB"/>
+                                                    <exclude reference="tcU-K1-Ex1"/>
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
@@ -592,6 +592,8 @@
                         <nil key="title"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="commentImage" destination="zcf-fW-agJ" id="rlY-NF-u2x"/>
+                        <outlet property="commentsSwitch" destination="EAr-rI-a28" id="EDL-9r-1Wc"/>
                         <outlet property="pickerView" destination="26f-G5-MEd" id="UuD-18-AEH"/>
                         <outlet property="ratingControl" destination="ZXk-XC-mhQ" id="q9h-vX-vEL"/>
                     </connections>
