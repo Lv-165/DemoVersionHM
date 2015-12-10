@@ -596,10 +596,11 @@ static bool isMainRoute;
             annotation.ratingForColor = veryGoodRating;
         }
         annotation.coordinate = coordinate;
-        annotation.title = [NSString stringWithFormat:@"%@", place.id];
+        annotation.title = [NSString stringWithFormat:@"Rating = %@", place.rating];
         annotation.subtitle = [NSString stringWithFormat:@"%.5g, %.5g",
                                annotation.coordinate.latitude,
                                annotation.coordinate.longitude];
+        annotation.idPlace = [place.id integerValue];
         
         //[_clusteredAnnotations addObject:annotation];
         
