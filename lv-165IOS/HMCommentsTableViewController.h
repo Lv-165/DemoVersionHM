@@ -2,7 +2,7 @@
 //  HMCommentsTableViewController.h
 //  lv-165IOS
 //
-//  Created by Yurii Huber on 09.12.15.
+//  Created by Yurii Huber on 10.12.15.
 //  Copyright © 2015 SS. All rights reserved.
 //
 
@@ -11,10 +11,10 @@
 
 @interface HMCommentsTableViewController : UITableViewController
 
-@property (strong, nonatomic) NSFetchedResultsController* fetchedResultsController;
-@property (strong, nonatomic) NSManagedObjectContext* managedObjectContext;
-
 @property(strong, nonatomic)NSMutableArray *commentsArray;
-@property(strong, nonatomic)NSString *description;
+@property(strong, nonatomic)NSString *descriptionString;
+
+@property (strong, nonatomic) Place *create;
 
 @end
+

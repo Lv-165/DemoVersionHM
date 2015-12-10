@@ -2,35 +2,65 @@
 //  HMCommentsTableViewController.m
 //  lv-165IOS
 //
-//  Created by Yurii Huber on 09.12.15.
+//  Created by Yurii Huber on 10.12.15.
 //  Copyright © 2015 SS. All rights reserved.
 //
 
 #import "HMCommentsTableViewController.h"
+#import "HMDynamicTableViewCell.h"
 #import "Place.h"
 #import "Description.h"
 #import "Comments.h"
 #import "DescriptionInfo.h"
 #import "Countries.h"
+#import "Comments.h"
+#import <MapKit/MapKit.h>
 
-@interface HMCommentsTableViewController () <UITableViewDataSource>
+@interface HMCommentsTableViewController ()
 
 @end
+
+static NSString* const CellIdentifier = @"DynamicTableViewCell";
 
 @implementation HMCommentsTableViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    NSArray *array = self.create.descript.allObjects;
+    //NSArray *commentsArray = self.create.comments.allObjects;
+    self.commentsArray = self.create.comments.allObjects;
     
-    NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Countries"];
+    Description *description = [array objectAtIndex:0];
+    DescriptionInfo *descriptionInfo = description.descriptInfo;
+    //Comments *comments = commentsArray;
+    
+    self.descriptionString = descriptionInfo.descriptionString;
+    
+    [[self navigationController] setNavigationBarHidden:NO animated:YES];
 }
 
-#pragma mark - UITableViewDataSource
+# pragma mark - Cell Setup
+
+- (void)setUpCell:(HMDynamicTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+    
+    if (indexPath.row == 0) {
+        cell.label.text = self.descriptionString;
+    }
+    else  if (indexPath.row >= 1){
+        Comments *comments = [self.commentsArray objectAtIndex:(indexPath.row-1)];
+        cell.label.text = comments.comment;
+    }
+}
+
+# pragma mark - UITableViewControllerDelegate
+
+//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+//    return 1;
+//}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-
-    if (self.description) {
+    if (self.descriptionString) {
         return [self.commentsArray count] + 1;
     }
     else {
@@ -39,30 +69,30 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    static NSString* identifier = @"Cell";
-    
-    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-    
-    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier];
-
-    if (indexPath.row == 0) {
-        cell.textLabel.text = self.description;
-    }
-    else {
-        cell.textLabel.text = [self.commentsArray objectAtIndex:indexPath.row - 1];
-    }
+    HMDynamicTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    [self setUpCell:cell atIndexPath:indexPath];
     
     return cell;
 }
 
-#pragma mark - Core Data - 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static HMDynamicTableViewCell *cell = nil;
+    static dispatch_once_t onceToken;
 
-- (NSManagedObjectContext* )managedObjectContext {
-    if (!_managedObjectContext) {
-        _managedObjectContext = [[HMCoreDataManager sharedManager]managedObjectContext];
-    }
-    return _managedObjectContext;
+    dispatch_once(&onceToken, ^{
+        cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    });
+    
+    [self setUpCell:cell atIndexPath:indexPath];
+    
+    return [self calculateHeightForConfiguredSizingCell:cell];
+}
+
+- (CGFloat)calculateHeightForConfiguredSizingCell:(UITableViewCell *)sizingCell {
+    [sizingCell layoutIfNeeded];
+    
+    CGSize size = [sizingCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+    return size.height;
 }
 
 @end
