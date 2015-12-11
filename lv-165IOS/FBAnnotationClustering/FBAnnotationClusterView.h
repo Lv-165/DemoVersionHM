@@ -11,8 +11,11 @@
 #import "FBAnnotationCluster.h"
 
 @interface FBAnnotationClusterView : MKAnnotationView
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-property-synthesis"
+@property(nonatomic) FBAnnotationCluster *annotation;
+#pragma clang diagnostic pop
 
-@property (nonatomic) FBAnnotationCluster * annotation;
-@property (nonatomic) UILabel * annotationLabel;
+@property(nonatomic) UILabel *annotationLabel;
 
 @end

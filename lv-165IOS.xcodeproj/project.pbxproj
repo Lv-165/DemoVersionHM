@@ -36,6 +36,7 @@
 		7FA55BE11C0DAFC700B99CC1 /* HMDownloadCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FA55BE01C0DAFC700B99CC1 /* HMDownloadCellTableViewCell.m */; };
 		7FA55BE81C0DB08200B99CC1 /* UIView+HMUItableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FA55BE71C0DB08200B99CC1 /* UIView+HMUItableViewCell.m */; };
 		7FE4EC611C0F12160075C9AC /* NSNumber+HMNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FE4EC601C0F12160075C9AC /* NSNumber+HMNumber.m */; };
+		840C6A3A1C1A3ED4005BBBC3 /* FBAnnotationClusterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 840C6A391C1A3ED4005BBBC3 /* FBAnnotationClusterView.m */; };
 		841135561C124399004AEDCA /* Continent+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 841135331C124399004AEDCA /* Continent+CoreDataProperties.m */; };
 		841135571C124399004AEDCA /* Continent.m in Sources */ = {isa = PBXBuildFile; fileRef = 841135351C124399004AEDCA /* Continent.m */; };
 		841135581C124399004AEDCA /* Comments+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 841135371C124399004AEDCA /* Comments+CoreDataProperties.m */; };
@@ -159,6 +160,8 @@
 		7FE4EC601C0F12160075C9AC /* NSNumber+HMNumber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSNumber+HMNumber.m"; path = "Extensions/NSNumber+HMNumber.m"; sourceTree = "<group>"; };
 		7FE6FF3D1C105F43005C6CB0 /* HMMapAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMMapAnnotation.h; sourceTree = "<group>"; };
 		7FE6FF3E1C105F43005C6CB0 /* HMMapAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HMMapAnnotation.m; sourceTree = "<group>"; };
+		840C6A381C1A3ED4005BBBC3 /* FBAnnotationClusterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FBAnnotationClusterView.h; path = FBAnnotationClustering/FBAnnotationClusterView.h; sourceTree = "<group>"; };
+		840C6A391C1A3ED4005BBBC3 /* FBAnnotationClusterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FBAnnotationClusterView.m; path = FBAnnotationClustering/FBAnnotationClusterView.m; sourceTree = "<group>"; };
 		841135321C124399004AEDCA /* Continent+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Continent+CoreDataProperties.h"; path = "Models/Continent+CoreDataProperties.h"; sourceTree = "<group>"; };
 		841135331C124399004AEDCA /* Continent+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Continent+CoreDataProperties.m"; path = "Models/Continent+CoreDataProperties.m"; sourceTree = "<group>"; };
 		841135341C124399004AEDCA /* Continent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Continent.h; path = Models/Continent.h; sourceTree = "<group>"; };
@@ -267,6 +270,8 @@
 		0C93B26C1C11DB840032A3AE /* FBAnnotationClustering */ = {
 			isa = PBXGroup;
 			children = (
+				840C6A381C1A3ED4005BBBC3 /* FBAnnotationClusterView.h */,
+				840C6A391C1A3ED4005BBBC3 /* FBAnnotationClusterView.m */,
 				0C93B2761C11DECB0032A3AE /* FBAnnotationCluster.h */,
 				0C93B2771C11DECB0032A3AE /* FBAnnotationCluster.m */,
 				0C93B2781C11DECB0032A3AE /* FBAnnotationClustering.h */,
@@ -702,6 +707,7 @@
 				A1C5EDEB1C0CC4D500F94400 /* HMSearchViewController.m in Sources */,
 				0C93B2821C11DECB0032A3AE /* FBQuadTreeNode.m in Sources */,
 				841135671C124399004AEDCA /* Country.m in Sources */,
+				840C6A3A1C1A3ED4005BBBC3 /* FBAnnotationClusterView.m in Sources */,
 				302A11D31C0371C3002F8FF0 /* UIAlertView+AFNetworking.m in Sources */,
 				841135591C124399004AEDCA /* Comments.m in Sources */,
 				C0E1A8181C18504500F0DF00 /* HMFiltersViewController.m in Sources */,
